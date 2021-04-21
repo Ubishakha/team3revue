@@ -21,7 +21,7 @@
                 Dikshyant Pradhan
             </h3>
             <div>
-                <span>Current Track: {{playback}}</span>
+                <span>Current Track: {{timestamp}}</span>
                 <span class= "playBtnSingle">
                    
                         <i class="far fa-play-circle playBtn"></i>
@@ -34,7 +34,7 @@
                 Khue Le
             </h3>
             <div>
-                <span>Current Track: {{playback}}</span>
+                <span>Current Track: {{timestamp}}</span>
                 <span class= "playBtnSingle">
                     
                         <i class="far fa-play-circle playBtn"></i>
@@ -47,7 +47,7 @@
                 Justin Garcia
             </h3>
             <div>
-                 <span>Current Track: {{playback}}</span>
+                 <span>Current Track: {{timestamp}}</span>
                  <span class= "playBtnSingle">
                     
                         <i class="far fa-play-circle playBtn"></i>

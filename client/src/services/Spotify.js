@@ -6,6 +6,6 @@ import Api from '@/services/Api'
 
 export default {
   spotifyLogin(){
-    return Api().post("/authorize");
+    return Api().get("/login");
   }
 }

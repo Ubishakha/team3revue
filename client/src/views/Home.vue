@@ -13,7 +13,7 @@
 // import PostPreview from '@/components/PostPreview'
 import CurrentTrack from '@/components/CurrentTrack'
 import PostsService from '@/services/PostsService'
-import Spotify from '@/services/Spotify'
+// import Spotify from '@/services/Spotify'
 
 export default {
   name: 'home',
@@ -21,9 +21,19 @@ export default {
   components: { CurrentTrack },
 
   methods: {
+
         connectToSpotify() {
-          window.open(Spotify.spotifyLogin(), "_blank");
+          window.open("http://localhost:80/api/auth-login", '_blank');
         }
+        // async connectToSpotify() {
+        //   try{
+        //     const url = await Spotify.spotifyLogin();
+        //     console.log(url);
+        //   }
+        //   catch(e){
+        //     console.log(e);
+        //   }
+        // }
       // connectToSpotify: function () {   
       //     window.open("https://accounts.spotify.com/authorize", "_blank");    
       // }
