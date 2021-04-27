@@ -48,9 +48,9 @@ from views.subvues import *  # noqa
 from views.users import *  # noqa
 import errors  # noqa
 
-# @app.route('/')
-# def basic():
-#     return redirect('/spotlogin')
+@app.route('/')
+def basic():
+    return redirect('spotlogin')
 
 #----------------------------------SpotifyOauth--------------
 @app.route('/spotlogin')
@@ -68,7 +68,7 @@ def redirectpage():
     code = request.args.get('code')
     token_info = sp_oauth.get_access_token(code)
     session[TOKEN_INFO]=token_info
-    return redirect(url_for('mainpageorsmth', _external=True))
+    return redirect(url_for('mainpageorsmth', _external=True)) 
 
 @app.route('/mainpageorsmth')
 def mainpageorsmth():
@@ -79,7 +79,7 @@ def mainpageorsmth():
         redirect(url_for('spotlogin', _external=True))
     print (token_info)
     sp = spotipy.Spotify(auth=token_info['access_token'],)
-    return sp.current_user_top_artists(limit=5,offset=0)
+    return sp.current_user_playing_track()['item']
 
 
 
@@ -102,8 +102,8 @@ def create_spotify_oauth():
     return SpotifyOAuth(
         client_id = "0e5b6e912af94415ba75116ea413538e",
         client_secret="59b70f0753fb43cb9d0fc922af134897",
-        redirect_uri=url_for('redirectpage', _external=True),
-        scope="user-top-read")                   
+        redirect_uri=url_for('redirectpage', _external=True), #...../redirectpage/
+        scope="user-top-read , user-read-currently-playing")                   
 
 
 
