@@ -1,28 +1,42 @@
 <template lang="html">
   <div class="home container">
-    <h1>Recent Posts</h1>
-    <PostPreview v-for="post in posts" :key="post.id" :post="post">
-      {{ post.title }}
-    </PostPreview>
-
-    <CreateButton></CreateButton>
-  </div>
+    <h1>Dashboard</h1>
+    
+    <CurrentTrack>
+    </CurrentTrack>
+     </div>
+  <input class="button connect" @click="connectToSpotify" type="submit" value="Connect To Spotify">
 </template>
 
 <script>
-import PostPreview from '@/components/PostPreview'
+// import { mapGetters } from "vuex";
+// import PostPreview from '@/components/PostPreview'
+import CurrentTrack from '@/components/CurrentTrack'
 import PostsService from '@/services/PostsService'
-import CreateButton from '@/components/CreateButton'
+// import Spotify from '@/services/Spotify'
 
 export default {
   name: 'home',
 
-  components: { PostPreview, CreateButton },
+  components: { CurrentTrack },
 
-  data() {
-    return {
-      posts: null
-    }
+  methods: {
+
+        connectToSpotify() {
+          window.open("http://localhost:80/api/auth-login", '_blank');
+        }
+        // async connectToSpotify() {
+        //   try{
+        //     const url = await Spotify.spotifyLogin();
+        //     console.log(url);
+        //   }
+        //   catch(e){
+        //     console.log(e);
+        //   }
+        // }
+      // connectToSpotify: function () {   
+      //     window.open("https://accounts.spotify.com/authorize", "_blank");    
+      // }
   },
 
   mounted() {
@@ -30,9 +44,14 @@ export default {
       .then(response => {
         this.posts = response.data
       })
+    
   }
+
 }
 </script>
 
-<style lang="css">
+<style scoped lang="css">
+.player{
+  display: block;
+}
 </style>

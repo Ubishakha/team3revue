@@ -5,7 +5,8 @@
       <p class="error">{{ error }}</p>
       <input v-model="username" type="text" placeholder="Username" ref="username">
       <input v-model="password" type="password" placeholder="Password">
-      <input class="button" type="submit" value="Login">
+     <input class="button" type="submit" value="Login">
+      <p>Don't have an account? <router-link v-if="!$store.state.isUserLoggedIn" :to="{ name: 'SignUp', params: {} }">Sign Up</router-link></p>
     </form>
   </div>
 </template>
