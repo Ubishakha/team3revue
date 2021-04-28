@@ -2,15 +2,12 @@
 	"folders": [
 		{
 			"path": "."
-		}, 
-		{
-			"path": "client/"
 		},
 		{
-			"path": "server/"
+			"path":"server"
 		},
 		{
-			"path": "nginx/"
+			"path":"client"
 		}
 	],
 	"settings": {}
