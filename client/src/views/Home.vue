@@ -1,5 +1,6 @@
 <template lang="html">
   <div class="home container">
+<<<<<<< HEAD
     <h1>Active Friends</h1>
     <FriendQueue :friendQueue="friendQueue" :friendInfo="friendInfo" />
     <PostPreview v-for="post in posts" :key="post.id" :post="post">
@@ -8,18 +9,33 @@
 
     <CreateButton></CreateButton>
   </div>
+=======
+    <h1>Dashboard</h1>
+    
+    <CurrentTrack>
+    </CurrentTrack>
+     </div>
+  <input class="button connect" @click="connectToSpotify" type="submit" value="Connect To Spotify">
+>>>>>>> Sprint1
 </template>
 
 <script>
-import PostPreview from '@/components/PostPreview'
+// import { mapGetters } from "vuex";
+// import PostPreview from '@/components/PostPreview'
+import CurrentTrack from '@/components/CurrentTrack'
 import PostsService from '@/services/PostsService'
+<<<<<<< HEAD
 import CreateButton from '@/components/CreateButton'
 import FriendQueue from '@/components/FriendQueue'
 
+=======
+// import Spotify from '@/services/Spotify'
+>>>>>>> Sprint1
 
 export default {
   name: 'home',
 
+<<<<<<< HEAD
   components: { PostPreview, CreateButton, FriendQueue },
 
   data() {
@@ -27,6 +43,27 @@ export default {
       posts: null,
       friendQueue: [] //This needs to be filled with the data from the 
     }
+=======
+  components: { CurrentTrack },
+
+  methods: {
+
+        connectToSpotify() {
+          window.open("http://localhost:80/api/auth-login", '_blank');
+        }
+        // async connectToSpotify() {
+        //   try{
+        //     const url = await Spotify.spotifyLogin();
+        //     console.log(url);
+        //   }
+        //   catch(e){
+        //     console.log(e);
+        //   }
+        // }
+      // connectToSpotify: function () {   
+      //     window.open("https://accounts.spotify.com/authorize", "_blank");    
+      // }
+>>>>>>> Sprint1
   },
 
   mounted() {
@@ -34,6 +71,7 @@ export default {
       .then(response => {
         this.posts = response.data
       })
+<<<<<<< HEAD
   },
   created() {
     this.friendQueue = [
@@ -54,9 +92,16 @@ export default {
         name: 'Khue'
       }
     ]
+=======
+    
+>>>>>>> Sprint1
   }
+
 }
 </script>
 
-<style lang="css">
+<style scoped lang="css">
+.player{
+  display: block;
+}
 </style>

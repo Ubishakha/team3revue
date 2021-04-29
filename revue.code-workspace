@@ -2,6 +2,12 @@
 	"folders": [
 		{
 			"path": "."
+		},
+		{
+			"path":"server"
+		},
+		{
+			"path":"client"
 		}
 	],
 	"settings": {}

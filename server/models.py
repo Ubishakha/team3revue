@@ -19,6 +19,7 @@ class User(Document):
     password = StringField(required=True)
     subscribed = ListField(ReferenceField("Subvue"))
     created = DateTimeField(required=True, default=datetime.datetime.now())
+    spotifyToken = StringField(required=False)
 
     def to_public_json(self):
         hashed_email = hashlib.md5(self.email.encode("utf-8")).hexdigest()
@@ -29,6 +30,7 @@ class User(Document):
             "hashedEmail": hashed_email,
             "subscribed": [subvue.to_public_json() for subvue in self.subscribed],
             "created": self.created,
+            "spotifyToken": self.spotifyToken
         }
 
         return data
