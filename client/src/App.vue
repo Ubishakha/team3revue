@@ -1,7 +1,6 @@
 <template>
     <div id="app">
         <NavBar />
-
         <main>
             <router-view />
         </main>
@@ -13,10 +12,16 @@ import NavBar from '@/components/NavBar'
 
 export default {
     name: 'app',
-    components: { NavBar },
-
+    components: { 
+        NavBar,
+    },
+    data() {
+        return {
+        }
+    },
     created() {
         this.$store.dispatch('updateSubscribedSubvues')
+        
     }
 }
 </script>
