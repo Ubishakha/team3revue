@@ -1,6 +1,6 @@
 <template>
   <div class="scrollable">
-    <div :key="friendInfo.id" v-for="friendInfo in friendQueue" :friendInfo="friendInfo" class="friendBox">
+    <div :key="friendInfo.id" v-for="friendInfo in friendQueue" :friendInfo="friendInfo" id="friendBox">
       <FriendInfo :friendInfo="friendInfo" :id ="friendInfo.id" :name="friendInfo.name" class="friendInfo" />
       <!-- {{friendInfo.name}} -->
     </div>
@@ -48,14 +48,15 @@ export default {
 ::-webkit-scrollbar-thumb:hover {
   background: rgb(16, 90, 34); 
 }
-.scrollable {
-  margin: auto;
+/* The main box of the friend queue */
+.scrollable { 
   border-radius: 10px;
-  height: 500px;
-  width:700px;
+  height: 350px;
+  width: 900px;
   overflow-y: auto;
 }
-.friendBox {
+/* Each individual box in the friend queue */
+#friendBox {
   height:250px;
   margin: auto;
   padding: 15px;

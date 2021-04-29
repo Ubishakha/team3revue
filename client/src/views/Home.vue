@@ -1,51 +1,38 @@
 <template lang="html">
-  <div class="home container">
-<<<<<<< HEAD
-    <h1>Active Friends</h1>
-    <FriendQueue :friendQueue="friendQueue" :friendInfo="friendInfo" />
-    <PostPreview v-for="post in posts" :key="post.id" :post="post">
-      {{ post.title }}
-    </PostPreview>
-
-    <CreateButton></CreateButton>
-  </div>
-=======
-    <h1>Dashboard</h1>
+  <div class="home-container">
     
-    <CurrentTrack>
-    </CurrentTrack>
-     </div>
+    <h1>Dashboard</h1>
+    <div class="main">
+      <Friends class="main-child" />
+      <FriendQueue class="main-child" :friendQueue="friendQueue" :friendInfo="friendInfo" />
+    </div>
+    <!--<CurrentTrack>
+    </CurrentTrack>-->
+  </div>
+    
   <input class="button connect" @click="connectToSpotify" type="submit" value="Connect To Spotify">
->>>>>>> Sprint1
 </template>
 
 <script>
 // import { mapGetters } from "vuex";
 // import PostPreview from '@/components/PostPreview'
-import CurrentTrack from '@/components/CurrentTrack'
+//import CurrentTrack from '@/components/CurrentTrack'
 import PostsService from '@/services/PostsService'
-<<<<<<< HEAD
-import CreateButton from '@/components/CreateButton'
 import FriendQueue from '@/components/FriendQueue'
+import Friends from '@/components/Friends'
 
-=======
 // import Spotify from '@/services/Spotify'
->>>>>>> Sprint1
 
 export default {
   name: 'home',
 
-<<<<<<< HEAD
-  components: { PostPreview, CreateButton, FriendQueue },
+  components: { FriendQueue, Friends,/* CurrentTrack */},
 
   data() {
     return {
-      posts: null,
-      friendQueue: [] //This needs to be filled with the data from the 
+      friendQueue: [] //This needs to be filled with the data from the spotify api
     }
-=======
-  components: { CurrentTrack },
-
+  },
   methods: {
 
         connectToSpotify() {
@@ -63,7 +50,6 @@ export default {
       // connectToSpotify: function () {   
       //     window.open("https://accounts.spotify.com/authorize", "_blank");    
       // }
->>>>>>> Sprint1
   },
 
   mounted() {
@@ -71,7 +57,6 @@ export default {
       .then(response => {
         this.posts = response.data
       })
-<<<<<<< HEAD
   },
   created() {
     this.friendQueue = [
@@ -92,16 +77,21 @@ export default {
         name: 'Khue'
       }
     ]
-=======
-    
->>>>>>> Sprint1
   }
 
 }
 </script>
 
 <style scoped lang="css">
+/* Is the scoped lang part needed? */
 .player{
   display: block;
+}
+.main {
+  max-width: 500px;
+  width: 75%;
+  display: grid;
+  grid-template-columns: 1fr 4fr;
+  grid-gap: 20px;
 }
 </style>
