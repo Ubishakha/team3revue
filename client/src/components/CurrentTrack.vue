@@ -21,12 +21,18 @@
                 Dikshyant Pradhan
             </h3>
             <div>
-                <span>Current Track: {{timestamp}}</span>
+                <span>Current Track: {{name}}</span>
                 <span class= "playBtnSingle">
                    
                         <i class="far fa-play-circle playBtn"></i>
                     
                 </span>
+            </div>
+            <PreviousTracks></PreviousTracks>
+            <div>
+                <p>
+                    {{items}}
+                </p>
             </div>
         </div> 
         <div class="container Friend-2">
@@ -34,67 +40,70 @@
                 Khue Le
             </h3>
             <div>
-                <span>Current Track: {{timestamp}}</span>
+                <span>Current Track: {{}}</span>
                 <span class= "playBtnSingle">
                     
                         <i class="far fa-play-circle playBtn"></i>
                    
                 </span>
             </div>
+            <PreviousTracks></PreviousTracks>
         </div> 
         <div class="container Friend-3">
             <h3>
                 Justin Garcia
             </h3>
             <div>
-                 <span>Current Track: {{timestamp}}</span>
+                 <span>Current Track: {{}}</span>
                  <span class= "playBtnSingle">
                     
                         <i class="far fa-play-circle playBtn"></i>
                     
                 </span>
             </div>
+            <PreviousTracks></PreviousTracks>
         </div> 
     </div>
   </div>
 </template>
 
 <script>
-// import { mapGetters } from "vuex";
-// import api from "@/api";
+// import Spotify from '@/services/Spotify'
+import PreviousTracks from '@/components/PreviousTracks'
 
 export default {
     name: 'current-track',
-
-
+    
+    components: { PreviousTracks },
+    
     data() {
         return {
-            "timestamp": 1490252122574,
-            "device": {
-                "id": "3f228e06c8562e2f439e22932da6c3231715ed53",
-                "is_active": false,
-                "is_restricted": false,
-                "name": "Xperia Z5 Compact",
-                "type": "Smartphone",
-                "volume_percent": 54
-            },
-            "progress_ms": "44272",
-            "is_playing": true,
-            "currently_playing_type": "track",
-            "item": {},
-            "shuffle_state": false,
-            "repeat_state": "off",
-            "context": {
-                "external_urls": {
-                "spotify": "http://open.spotify.com/user/spotify/playlist/49znshcYJROspEqBoHg3Sv"
-            },
-            "href": "https://api.spotify.com/v1/users/spotify/playlists/49znshcYJROspEqBoHg3Sv",
-            "type": "playlist",
-            "uri": "spotify:user:spotify:playlist:49znshcYJROspEqBoHg3Sv"
-            }
+            error: null,
+            name: []
         }
+    },
+    created: async function() {
+             fetch("http://localhost:5000/mainpageorsmth").then(response => {
+                 response.json().then(data=>{
+                     if (!data.logged_in){
+                         window.open(data.url)
+                     }
+                     console.log(data)}); 
+             },response=>{
+                 console.log("Not logged in");
+                 console.log(response.url);
+             })
+
+             
+            //  this.url = val.url;
+            //  window.open(this.url);
+            }
+
+    // mounted(){
+    //     Spotify.completeLogin()
+    // }
+    
     }
-}
 
     
 </script>
