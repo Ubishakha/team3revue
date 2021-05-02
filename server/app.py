@@ -54,21 +54,22 @@ def basic():
 
 #----------------------------------SpotifyOauth--------------
 @app.route('/spotlogin')
-def login123():
+def spotlogin():
     #connect spotify account to the app
     sp_oauth= create_spotify_oauth()        #creates oauth token
     auth_url = sp_oauth.get_authorize_url()
     print(auth_url)
     return redirect(auth_url)       #redirects to the authurl which we specified in the create_spotify_oauth function
 
-@app.route('/redirect')
+@app.route('/api/redirect', methods=["POST"])
 def redirectpage():
     sp_oauth= create_spotify_oauth()
     session.clear()
-    code = request.args.get('code')
+    print(request.json)
+    code = request.json.get("content")
     token_info = sp_oauth.get_access_token(code)
     session[TOKEN_INFO]=token_info
-    return redirect(url_for('mainpageorsmth', _external=True)) 
+    return "OK"
 
 @app.route('/mainpageorsmth')
 def mainpageorsmth():
@@ -76,17 +77,14 @@ def mainpageorsmth():
         token_info= get_token()
     except:
         print("user not logged in")
-        redirect(url_for('spotlogin', _external=True))
+        return {"Error": "Not logged in", "logged_in": False, "url": url_for('spotlogin', _external=True)}
     print (token_info)
     sp = spotipy.Spotify(auth=token_info['access_token'],)
-    return sp.current_user_playing_track()['item']
-
-
-
+    return {"data": sp.current_user_recently_played(limit=5), "logged_in": True}
 
 def get_token():
     token_info=session.get(TOKEN_INFO, None) #return none if token_info is empty
-    if not token_info:
+    if token_info == None:
         raise exception
     now = int(time.time())
 
@@ -102,8 +100,8 @@ def create_spotify_oauth():
     return SpotifyOAuth(
         client_id = "0e5b6e912af94415ba75116ea413538e",
         client_secret="59b70f0753fb43cb9d0fc922af134897",
-        redirect_uri=url_for('redirectpage', _external=True), #...../redirectpage/
-        scope="user-top-read , user-read-currently-playing")                   
+        redirect_uri='http://localhost:8080/spotifyredirect', #...../redirectpage/
+        scope="user-top-read , user-read-currently-playing, user-read-recently-played")                   
 
 
 
