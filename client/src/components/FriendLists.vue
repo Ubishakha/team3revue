@@ -1,12 +1,12 @@
 <template>
   <div id="friendList">
-    <b-form-input
+    <input
       type="text"
       id="myInput"
-      @input="myFunction()" 
+      @input="myFunction()"
       placeholder="Search for friends"
       title="Type in a name"
-    /> <!-- Working on getting the search bar to work-->
+    />
     <ul id="myUL">
       <li><a href="#">Nick</a></li>
       <li><a href="#">Alex</a></li>

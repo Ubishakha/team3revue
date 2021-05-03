@@ -1,12 +1,3 @@
-<<<<<<< HEAD
-import Api from '@/services/Api'
-
-export default {
-  completeLogin(code){
-    return Api().post("/redirect", {content: code});
-  }
-}
-=======
 // import axios from 'axios'
 import Api from '@/services/Api'
 // const request = axios.create({
@@ -18,4 +9,3 @@ export default {
     return Api().get("/login");
   }
 }
->>>>>>> JustinSprint1
