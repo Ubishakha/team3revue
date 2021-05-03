@@ -3,8 +3,8 @@
     
     <h1>Dashboard</h1>
     <div class="main">
-      <Friends class="main-child" />
-      <FriendQueue class="main-child" :friendQueue="friendQueue" :friendInfo="friendInfo" />
+      <FriendLists class="main-child" :friendLists="friendLists" />
+      <FriendQueue class="main-child" :friendQueue="friendQueue" /> <!-- This is the list of friend's currently playing songs-->
     </div>
     <!--<CurrentTrack>
     </CurrentTrack>-->
@@ -19,14 +19,14 @@
 //import CurrentTrack from '@/components/CurrentTrack'
 import PostsService from '@/services/PostsService'
 import FriendQueue from '@/components/FriendQueue'
-import Friends from '@/components/Friends'
+import FriendLists from '@/components/FriendLists'
 
 // import Spotify from '@/services/Spotify'
 
 export default {
   name: 'home',
 
-  components: { FriendQueue, Friends,/* CurrentTrack */},
+  components: { FriendQueue, FriendLists,/* CurrentTrack */},
 
   data() {
     return {
@@ -59,22 +59,26 @@ export default {
       })
   },
   created() {
-    this.friendQueue = [
+    this.friendQueue = [ //Fill in this array with the information from the user
       {
-        id: 1,
-        name: 'Justin Garcia'
+        id: 1, //user id
+        name: 'Justin Garcia', //friend's name, potentially register the user as one of these objects
+        currSong: 'Mood Swings by A Boogie',
       },
       {
         id: 2,
-        name: 'DK'
+        name: 'DK',
+        currSong: 'Up by Dro Kenji'
       },
       {
         id: 3,
-        name: 'Bishakha'
+        name: 'Bishakha',
+        currSong: 'El Portal by Caleborate'
       },
       {
         id: 4,
-        name: 'Khue'
+        name: 'Khue',
+        currSong: 'Ruby Red by Smino'
       }
     ]
   }
@@ -88,8 +92,6 @@ export default {
   display: block;
 }
 .main {
-  max-width: 500px;
-  width: 75%;
   display: grid;
   grid-template-columns: 1fr 4fr;
   grid-gap: 20px;
