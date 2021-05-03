@@ -5,14 +5,15 @@
     <CurrentTrack>
     </CurrentTrack>
      </div>
-  <input class="button connect" @click="connectToSpotify" type="submit" value="Connect To Spotify">
+  <input class="button connect" @click="connectToSpotify" type="submit" value="Get Data">
+  <a href="http://localhost:5000/spotlogin">Login</a>
 </template>
 
 <script>
 // import { mapGetters } from "vuex";
 // import PostPreview from '@/components/PostPreview'
 import CurrentTrack from '@/components/CurrentTrack'
-import PostsService from '@/services/PostsService'
+// import PostsService from '@/services/PostsService'
 // import Spotify from '@/services/Spotify'
 
 export default {
@@ -20,11 +21,10 @@ export default {
 
   components: { CurrentTrack },
 
-  mounted() {
-    PostsService.index()
-      .then(response => {
-        this.posts = response.data
-      })
+  methods:{
+    connectToSpotify(){
+      fetch("http://localhost:5000/spotlogin")
+    }
     
   }
 
