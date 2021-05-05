@@ -72,7 +72,7 @@ def redirectpage():
     token_info = sp_oauth.get_access_token(code)
     print('i reached here')
     session[TOKEN_INFO]=token_info
-    return 'ok'
+    return redirect('mainpageorsmth')
 
 @app.route('/mainpageorsmth')
 def mainpageorsmth():
@@ -83,7 +83,18 @@ def mainpageorsmth():
         return {"Error": "Not logged in", "logged_in": False, "url": url_for('spotlogin', _external=True)}
     #print (token_info)
     sp = spotipy.Spotify(auth=token_info['access_token'],)
-    return {"data": sp.current_user_recently_played(limit=5), "logged_in": True}
+    return sp.current_user_recently_played(limit=10)
+
+@app.route('/current-track')
+def currentTrack():
+    try:
+        token_info= get_token()
+    except:
+        print("user not logged in")
+        return {"Error": "Not logged in", "logged_in": False, "url": url_for('spotlogin', _external=True)}
+    #print (token_info)
+    sp = spotipy.Spotify(auth=token_info['access_token'],)
+    return {"data": sp.current_user_playing_track(), "logged_in": True}
 
 def get_token():
     token_info=session.get(TOKEN_INFO, None) #return none if token_info is empty

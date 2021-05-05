@@ -17,146 +17,66 @@
   <div class="FriendList">
     <div class="current-track">
         <div class="container Friend-1">
-            <h3>
-                Dikshyant Pradhan
-            </h3>
-            <div>
-                <span>Current Track: {{item.name}}</span>
-                <span class= "playBtnSingle">
-                   
-                        <i class="far fa-play-circle playBtn"></i>
-                    
-                </span>
+            <div @click="showTracks=!showTracks" class="hovered name">
+                <strong>Dikshyant Pradhan</strong>
             </div>
-            <PreviousTracks></PreviousTracks>
-            <div>
-                <p>
-                    {{items}}
-                </p>
+            <div class="track">
+                <div>
+                    <span class="hovered currSong"><strong>Current Track: </strong>
+                        <span class="trackName">{{data.item.name}}</span><span class="artistName">{{data.item.artists[0].name}}</span>
+                    </span>
+                
+                    <span class= "playBtnSingle">
+                        <a v-bind:href="url" >
+                            <i class="far fa-play-circle playBtn hovered"></i>
+                        </a>
+                    </span>
+                </div>
             </div>
-        </div> 
-        <div class="container Friend-2">
-            <h3>
-                Khue Le
-            </h3>
-            <div>
-                <span>Current Track: {{}}</span>
-                <span class= "playBtnSingle">
-                    
-                        <i class="far fa-play-circle playBtn"></i>
-                   
-                </span>
-            </div>
-            <PreviousTracks></PreviousTracks>
-        </div> 
-        <div class="container Friend-3">
-            <h3>
-                Justin Garcia
-            </h3>
-            <div>
-                 <span>Current Track: {{}}</span>
-                 <span class= "playBtnSingle">
-                    
-                        <i class="far fa-play-circle playBtn"></i>
-                    
-                </span>
-            </div>
-            <PreviousTracks></PreviousTracks>
         </div> 
     </div>
+     <PreviousTracks v-if="showTracks"></PreviousTracks>
   </div>
 </template>
 
 <script>
-// import Spotify from '@/services/Spotify'
+import Spotify from '@/services/Spotify'
+import spot from '../json/curr-track.json'
 import PreviousTracks from '@/components/PreviousTracks'
 
 export default {
     name: 'current-track',
     
     components: { PreviousTracks },
-    
+
     data() {
         return {
-        "context": {
-            "external_urls": {
-                "spotify": "http://open.spotify.com/user/spotify/playlist/49znshcYJROspEqBoHg3Sv"
-            },
-            "href": "https://api.spotify.com/v1/users/spotify/playlists/49znshcYJROspEqBoHg3Sv",
-            "type": "playlist",
-            "uri": "spotify:user:spotify:playlist:49znshcYJROspEqBoHg3Sv"
-        },
-        "timestamp": 1490252122574,
-        "progress_ms": 44272,
-        "is_playing": true,
-        "currently_playing_type": "track",
-        "item": {
-            "album": {
-                "album_type": "album",
-                "external_urls": {
-                    "spotify": "https://open.spotify.com/album/6TJmQnO44YE5BtTxH8pop1"
-                },
-            "href": "https://api.spotify.com/v1/albums/6TJmQnO44YE5BtTxH8pop1",
-            "id": "6TJmQnO44YE5BtTxH8pop1",
-            "images": [
-                {
-                    "height": 640,
-                    "url": "https://i.scdn.co/image/8e13218039f81b000553e25522a7f0d7a0600f2e",
-                    "width": 629
-                },
-                {
-                    "height": 300,
-                    "url": "https://i.scdn.co/image/8c1e066b5d1045038437d92815d49987f519e44f",
-                    "width": 295
-                },
-                {
-                    "height": 64,
-                    "url": "https://i.scdn.co/image/d49268a8fc0768084f4750cf1647709e89a27172",
-                    "width": 63
-                }
-            ],
-            "name": "Hot Fuss",
-            "type": "album",
-            "uri": "spotify:album:6TJmQnO44YE5BtTxH8pop1"
-        },
-        "artists": [
-            {
-                "external_urls": {
-                    "spotify": "https://open.spotify.com/artist/0C0XlULifJtAgn6ZNCW2eu"
-                },
-                "href": "https://api.spotify.com/v1/artists/0C0XlULifJtAgn6ZNCW2eu",
-                "id": "0C0XlULifJtAgn6ZNCW2eu",
-                "name": "The Killers",
-                "type": "artist",
-                "uri": "spotify:artist:0C0XlULifJtAgn6ZNCW2eu"
-            }
-        ],
-        "available_markets": [
-            "AD",
-            "AR",
-            "TW",
-            "UY"
-        ],
-        "disc_number": 1,
-        "duration_ms": 222075,
-        "explicit": false,
-        "external_ids": {
-            "isrc": "USIR20400274"
-        },
-        "external_urls": {
-            "spotify": "https://open.spotify.com/track/0eGsygTp906u18L0Oimnem"
-        },
-        "href": "https://api.spotify.com/v1/tracks/0eGsygTp906u18L0Oimnem",
-        "id": "0eGsygTp906u18L0Oimnem",
-        "name": "Mr. Brightside",
-        "popularity": 0,
-        "preview_url": "http://d318706lgtcm8e.cloudfront.net/mp3-preview/f454c8224828e21fa146af84916fd22cb89cedc6",
-        "track_number": 2,
-        "type": "track",
-        "uri": "spotify:track:0eGsygTp906u18L0Oimnem"
+            data: spot.data,
+            url : spot.data.item.artists[0].external_urls.spotify,
+            track: {},
+            showTracks : false,
         }
-    }
-    }
+    },
+
+    async trackInfo() {
+      try {
+        const response = await Spotify.getCurrentTrack()
+        console.log(response)
+        const results = response.data.results
+        console.log(results)
+      } catch (err) {
+        if (err.response) {
+          // client received an error response (5xx, 4xx)
+          console.log("Server Error:", err)
+        } else if (err.request) {
+          // client never received a response, or request never left
+          console.log("Network Error:", err)
+        } else {
+          console.log("Client Error:", err)
+        }
+      }
+    },
+    
     // created: async function() {
     //          fetch("http://localhost:5000/mainpageorsmth").then(response => {
     //              response.json().then(data=>{
@@ -181,13 +101,21 @@ export default {
     // mounted(){
     //     Spotify.completeLogin()
     // }
-    
-    }
+}
 
     
 </script>
 
 <style scoped>
+
+.hovered:hover, .playBtnSingle:hover {
+    color: #43af55;
+}
+
+.currSong{
+    padding-bottom: 1em;
+
+}
 .UserInfo{
     background: #333;
     color: aliceblue;
@@ -206,10 +134,9 @@ export default {
     border-radius: 2px;
 }
 
-/* .all-friends{
-    overflow: y;
-    max-height: 100px;
-} */
+strong{
+    font-size: 1.05em;
+}
 
 .search {
   width: 100%;
@@ -245,6 +172,22 @@ export default {
     background: transparent;
     border-radius: 0 5px 5px 0;
     color: aliceblue;
+} 
+
+.currSong{
+    padding-left: 1em;
 }
+
+.name{
+    font-size: 20px;
+    /* width: 25%; */
+    margin-bottom: 0.5em;
+}
+
+
+/* .trackName{
+    float: right;
+} */
+
 
 </style>
