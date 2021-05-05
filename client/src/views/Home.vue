@@ -11,6 +11,11 @@
   </div>
     
   <input class="button connect" @click="connectToSpotify" type="submit" value="Connect To Spotify">
+    <CurrentTrack>
+    </CurrentTrack>
+    <input class="button connect" @click="connectToSpotify" type="submit" value="Get Data">
+    <button> <a href="http://localhost:5000/spotlogin"> Login </a> </button>
+     </div>
 </template>
 
 <script>
@@ -21,6 +26,8 @@ import PostsService from '@/services/PostsService'
 import FriendQueue from '@/components/FriendQueue'
 import FriendLists from '@/components/FriendLists'
 
+import CurrentTrack from '@/components/CurrentTrack'
+// import PostsService from '@/services/PostsService'
 // import Spotify from '@/services/Spotify'
 
 export default {
@@ -28,6 +35,11 @@ export default {
 
   components: { FriendQueue, FriendLists,/* CurrentTrack */},
 
+  methods:{
+    connectToSpotify(){
+      fetch("http://localhost:5000/mainpageorsmth").then(response => response.json())
+        .then(data => console.log(data));
+    }
   data() {
     return {
       friendQueue: [] //This needs to be filled with the data from the spotify api

@@ -62,15 +62,18 @@ def spotlogin():
     print(auth_url)
     return redirect(auth_url)       #redirects to the authurl which we specified in the create_spotify_oauth function
 
-@app.route('/api/redirect', methods=["POST"])
+@app.route('/redirect')
 def redirectpage():
     sp_oauth= create_spotify_oauth()
     session.clear()
-    print(request.json)
-    code = request.json.get("content")
+    # print(request.json)
+    # code = request.json.get("content")
+    code = request.args.get('code')
+    print('i got here first!!!!')
     token_info = sp_oauth.get_access_token(code)
+    print('i reached here')
     session[TOKEN_INFO]=token_info
-    return "OK"
+    return redirect('mainpageorsmth')
 
 @app.route('/mainpageorsmth')
 def mainpageorsmth():
@@ -79,9 +82,20 @@ def mainpageorsmth():
     except:
         print("user not logged in")
         return {"Error": "Not logged in", "logged_in": False, "url": url_for('spotlogin', _external=True)}
-    print (token_info)
+    #print (token_info)
     sp = spotipy.Spotify(auth=token_info['access_token'],)
-    return {"data": sp.current_user_recently_played(limit=5), "logged_in": True}
+    return sp.current_user_recently_played(limit=10)
+
+@app.route('/current-track')
+def currentTrack():
+    try:
+        token_info= get_token()
+    except:
+        print("user not logged in")
+        return {"Error": "Not logged in", "logged_in": False, "url": url_for('spotlogin', _external=True)}
+    #print (token_info)
+    sp = spotipy.Spotify(auth=token_info['access_token'],)
+    return {"data": sp.current_user_playing_track(), "logged_in": True}
 
 def get_token():
     token_info=session.get(TOKEN_INFO, None) #return none if token_info is empty
@@ -101,7 +115,7 @@ def create_spotify_oauth():
     return SpotifyOAuth(
         client_id = "0e5b6e912af94415ba75116ea413538e",
         client_secret="59b70f0753fb43cb9d0fc922af134897",
-        redirect_uri='http://localhost:8080/spotifyredirect', #...../redirectpage/
+        redirect_uri=url_for('redirectpage', _external=True), #...../redirectpage/
         scope="user-top-read , user-read-currently-playing, user-read-recently-played")                   
 
 

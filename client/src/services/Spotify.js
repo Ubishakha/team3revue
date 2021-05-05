@@ -5,7 +5,10 @@ import Api from '@/services/Api'
 // });
 
 export default {
-  spotifyLogin(){
-    return Api().get("/login");
+  completeLogin(code){
+    return Api().post("/redirect", {content: code});
+  }, 
+  getCurrentTrack(){
+    return Api().get("/current-track");
   }
 }

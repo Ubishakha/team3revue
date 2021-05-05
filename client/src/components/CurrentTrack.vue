@@ -18,98 +18,105 @@
   <div class="FriendList">
     <div class="current-track">
         <div class="container Friend-1">
-            <h3>
-                Dikshyant Pradhan
-            </h3>
-            <div>
-                <span>Current Track: {{name}}</span>
-                <span class= "playBtnSingle">
-                   
-                        <i class="far fa-play-circle playBtn"></i>
-                    
-                </span>
+            <div @click="showTracks=!showTracks" class="hovered name">
+                <strong>Dikshyant Pradhan</strong>
             </div>
-            <PreviousTracks></PreviousTracks>
-            <div>
-                <p>
-                    {{items}}
-                </p>
+            <div class="track">
+                <div>
+                    <span class="hovered currSong"><strong>Current Track: </strong>
+                        <span class="trackName">{{data.item.name}}</span><span class="artistName">{{data.item.artists[0].name}}</span>
+                    </span>
+                
+                    <span class= "playBtnSingle">
+                        <a v-bind:href="url" >
+                            <i class="far fa-play-circle playBtn hovered"></i>
+                        </a>
+                    </span>
+                </div>
             </div>
-        </div> 
-        <div class="container Friend-2">
-            <h3>
-                Khue Le
-            </h3>
-            <div>
-                <span>Current Track: {{}}</span>
-                <span class= "playBtnSingle">
-                    
-                        <i class="far fa-play-circle playBtn"></i>
-                   
-                </span>
-            </div>
-            <PreviousTracks></PreviousTracks>
-        </div> 
-        <div class="container Friend-3">
-            <h3>
-                Justin Garcia
-            </h3>
-            <div>
-                 <span>Current Track: {{}}</span>
-                 <span class= "playBtnSingle">
-                    
-                        <i class="far fa-play-circle playBtn"></i>
-                    
-                </span>
-            </div>
-            <PreviousTracks></PreviousTracks>
         </div> 
     </div>
+     <PreviousTracks v-if="showTracks"></PreviousTracks>
   </div>
 </template>
 
 <script>
-// import Spotify from '@/services/Spotify'
+import Spotify from '@/services/Spotify'
+import spot from '../json/curr-track.json'
 import PreviousTracks from '@/components/PreviousTracks'
 
 export default {
     name: 'current-track',
     
     components: { PreviousTracks },
-    
+
     data() {
         return {
-            error: null,
-            name: []
+            data: spot.data,
+            url : spot.data.item.artists[0].external_urls.spotify,
+            track: {},
+            showTracks : false,
         }
     },
-    created: async function() {
-             fetch("http://localhost:5000/mainpageorsmth").then(response => {
-                 response.json().then(data=>{
-                     if (!data.logged_in){
-                         window.open(data.url)
-                     }
-                     console.log(data)}); 
-             },response=>{
-                 console.log("Not logged in");
-                 console.log(response.url);
-             })
+
+    async trackInfo() {
+      try {
+        const response = await Spotify.getCurrentTrack()
+        console.log(response)
+        const results = response.data.results
+        console.log(results)
+      } catch (err) {
+        if (err.response) {
+          // client received an error response (5xx, 4xx)
+          console.log("Server Error:", err)
+        } else if (err.request) {
+          // client never received a response, or request never left
+          console.log("Network Error:", err)
+        } else {
+          console.log("Client Error:", err)
+        }
+      }
+    },
+    
+    // created: async function() {
+    //          fetch("http://localhost:5000/mainpageorsmth").then(response => {
+    //              response.json().then(data=>{
+    //                  if (!data.logged_in){
+    //                      console.log(data); 
+    //                      window.open(data.url)
+    //                     //  setTimeout(function() {
+    //                     //     wnd.close();
+    //                     // }, 1000000)
+    //                  }
+    //                  console.log(data)}); 
+    //          },response=>{
+    //              console.log("Not logged in");
+    //              console.log(response.url);
+    //          })
 
              
             //  this.url = val.url;
             //  window.open(this.url);
-            }
+            // }
 
     // mounted(){
     //     Spotify.completeLogin()
     // }
-    
-    }
+}
 
     
 </script>
 
 <style scoped>
+
+.hovered:hover, .playBtnSingle:hover {
+    color: #43af55;
+}
+
+.currSong{
+    padding-bottom: 1em;
+
+}
 .UserInfo{
     background: #333;
     color: aliceblue;
@@ -128,10 +135,9 @@ export default {
     border-radius: 2px;
 }
 
-/* .all-friends{
-    overflow: y;
-    max-height: 100px;
-} */
+strong{
+    font-size: 1.05em;
+}
 
 .search {
   width: 100%;
@@ -167,7 +173,23 @@ export default {
     background: transparent;
     border-radius: 0 5px 5px 0;
     color: aliceblue;
+} 
+
+.currSong{
+    padding-left: 1em;
 }
+
+.name{
+    font-size: 20px;
+    /* width: 25%; */
+    margin-bottom: 0.5em;
+}
+
+
+/* .trackName{
+    float: right;
+} */
+
 
 </style>
 =======
