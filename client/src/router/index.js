@@ -43,6 +43,11 @@ const routes = [
     name: 'CreateSubvue',
     component: () => import(/* webpackChunkName: "createsubvue" */ '@/views/CreateSubvue')
   },
+  {
+    path: '/spotifyredirect',
+    name: 'Redirect',
+    component: () => import(/* webpackChunkName: "redirect" */ '@/components/Redirect')
+  }
 ]
 
 const router = createRouter({

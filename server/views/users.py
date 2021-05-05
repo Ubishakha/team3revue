@@ -10,3 +10,4 @@ def user_username(username: str) -> str:
         return jsonify(user.to_public_json())
     else:
         return jsonify({"error": "User not found"}), 404
+

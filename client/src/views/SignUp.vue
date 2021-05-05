@@ -9,6 +9,7 @@
       <input type="password" v-model="passwordRepeat" placeholder="Repeat Password">
       <p v-if="!passwordsMatch" class="error">Passwords do not match!</p>
       <input class="button" type="submit" value="Sign Up">
+      <p>Already have an account? <router-link v-if="!$store.state.isUserLoggedIn" :to="{ name: 'Login', params: {} }">Login</router-link></p>
     </form>
   </div>
 </template>

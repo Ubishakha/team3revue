@@ -3,3 +3,6 @@ Flask-Cors==3.0.8
 mongoengine==0.19.1
 PyJWT==1.7.1
 schema==0.7.1
+spotipy==2.18.0
+requests==2.25.1
+requests-html==0.10.0
