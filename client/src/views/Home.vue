@@ -2,8 +2,8 @@
   <div class="outer-wrapper"> 
       <h1>Dashboard</h1>
        <div>
-    <input class="button connect" @click="connectToSpotify" type="submit" value="Get Data">
-    <button> <a href="http://localhost:5000/spotlogin"> Login </a> </button>
+    <!-- <input class="button connect" @click="connectToSpotify" type="submit" value="Get Data"> -->
+    <button> <a href="http://localhost:5000/spotlogin"> Login To Spotify </a> </button>
   </div>
       <div class="wrapper"> 
         
