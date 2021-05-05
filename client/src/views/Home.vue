@@ -3,7 +3,7 @@
       <h1>Dashboard</h1>
        <div>
     <!-- <input class="button connect" @click="connectToSpotify" type="submit" value="Get Data"> -->
-    <button> <a href="http://localhost:5000/spotlogin"> Login To Spotify </a> </button>
+    <button> <a :href="url"> Login To Spotify </a> </button>
   </div>
       <div class="wrapper"> 
         
@@ -32,18 +32,19 @@ export default {
   name: 'home',
 
   components: { FriendLists,CurrentTrack },
+  
+  data() {
+    return {
+      friendQueue: [], //This needs to be filled with the data from the spotify api
+      url: process.env.VUE_APP_API_ENDPOINT + "/spotlogin"
+    }
+  },
 
   methods:{
     connectToSpotify(){
       fetch("http://localhost:5000/mainpageorsmth").then(response => response.json())
         .then(data => console.log(data));
     },
-
-  data() {
-    return {
-      friendQueue: [] //This needs to be filled with the data from the spotify api
-    }
-  },
   
   created() {
     this.friendQueue = [ //Fill in this array with the information from the user
