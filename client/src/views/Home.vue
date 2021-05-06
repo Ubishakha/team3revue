@@ -2,7 +2,7 @@
   <div class="outer-wrapper"> 
       <h1>Dashboard</h1>
        <div>
-    <!-- <input class="button connect" @click="connectToSpotify" type="submit" value="Get Data"> -->
+    <input class="button connect" @click="connectToSpotify" type="submit" value="Get Data">
     <button> <a :href="url"> Login To Spotify </a> </button>
   </div>
       <div class="wrapper"> 
@@ -41,10 +41,40 @@ export default {
   },
 
   methods:{
-    connectToSpotify(){
-      fetch("http://localhost:5000/mainpageorsmth").then(response => response.json())
-        .then(data => console.log(data));
-    },
+    // async connectToSpotify(){
+    //   fetch('http://localhost:5000/current-track', {
+    //     method: 'POST',
+    //     body: JSON.stringify({token: 'BQDVNTuSTn3m3aFdrQaoy26hPzD4vIj2okXy773N17cSdgKbWRo_e3xNHefvJ7PtOLO1GrqVqZhdrtPMSpzqM7wAOWx2mEm409jtHTWle_u2iPc8yI5RBmJ7cka1iZRAd_1Cr7F3QFsK-7RPhP73z6NFJZ3k1GT_6JgaPTUji6zmOJf3VMA'}),
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //     },
+    //     credentials: "same-origin",
+    //     })
+    //     .then(response => response.json())
+    //     .then(data => {
+    //     console.log('Success:', data);
+    //     })
+    //     .catch((error) => {
+    //     console.error('Error:', error);
+    //     });
+    async connectToSpotify(){
+      fetch('http://localhost:5000/mainpageorsmth', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        mode: 'cors',
+        credentials: 'include',
+        // body: JSON.stringify(data),
+        })
+        .then(response => response.json())
+        .then(data => {
+          console.log('Success:', data);
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+        });
+  },
   
   created() {
     this.friendQueue = [ //Fill in this array with the information from the user

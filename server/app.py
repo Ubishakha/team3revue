@@ -4,7 +4,7 @@ import config
 import os
 
 from datetime import date
-from flask import Flask, jsonify, send_from_directory, request, url_for, session, redirect
+from flask import Flask, jsonify, send_from_directory, request, url_for, session, redirect, make_response
 from flask.json import JSONEncoder
 from flask_cors import CORS
 
@@ -33,7 +33,8 @@ app = Flask(__name__)
 app.json_encoder = CustomJSONEncoder
 app.config["SECRET_KEY"] = config.flask_secret_key
 app.config['SESSION_COOKIE_NAME']= 'Spoti-fi Cookie'
-CORS(app)
+app.config['SESSION_COOKIE_HTTPONLY'] = True
+cors = CORS(app, origins=['http://localhost:5000', 'http://localhost:8080'], supports_credentials=True)
 TOKEN_INFO='token_info'
 
 
@@ -72,29 +73,49 @@ def redirectpage():
     token_info = sp_oauth.get_access_token(code)
     print('i reached here')
     session[TOKEN_INFO]=token_info
-    return redirect('mainpageorsmth')
+    response = make_response(redirect('/mainpageorsmth'))
+    return response
 
 @app.route('/mainpageorsmth')
 def mainpageorsmth():
+    # print(get_token())
     try:
-        token_info= get_token()
+        token_info = get_token()
     except:
         print("user not logged in")
         return {"Error": "Not logged in", "logged_in": False, "url": url_for('spotlogin', _external=True)}
-    #print (token_info)
-    sp = spotipy.Spotify(auth=token_info['access_token'],)
-    return sp.current_user_recently_played(limit=10)
 
-@app.route('/current-track')
-def currentTrack():
-    try:
-        token_info= get_token()
-    except:
-        print("user not logged in")
-        return {"Error": "Not logged in", "logged_in": False, "url": url_for('spotlogin', _external=True)}
-    #print (token_info)
     sp = spotipy.Spotify(auth=token_info['access_token'],)
-    return {"data": sp.current_user_playing_track(), "logged_in": True}
+    # make_response allows to pass headers
+    response = make_response(sp.current_user_recently_played(limit=10), 200)
+    # Need to change the hard coded url 
+    response.headers.add('Access-Control-Allow-Origin', 'http://localhost:8080')
+    response.headers.add('Access-Control-Allow-Credentials', 'true')
+    return response
+
+# @app.route('/current-track')
+# def currentTrack():
+#     try:
+#         token_info= get_token()
+#     except:
+#         print("user not logged in")
+#         return {"Error": "Not logged in", "logged_in": False, "url": url_for('spotlogin', _external=True)}
+#     #print (token_info)
+#     sp = spotipy.Spotify(auth=token_info['access_token'],)
+#     return {"data": sp.current_user_playing_track(), "logged_in": True}
+
+@app.route('/current-track', methods=['POST'])
+def currentTrack():
+    # try:
+    #     token_info= get_token()
+    # except:
+    #     print("user not logged in")
+    #     return {"Error": "Not logged in", "logged_in": False, "url": url_for('spotlogin', _external=True)}
+    #print (token_info)
+    print(request.get_json('token')['token'])
+    sp = spotipy.Spotify(auth=request.get_json('token')['token'])
+    
+    return {"data": sp.current_user_recently_played(), "logged_in": True}
 
 def get_token():
     token_info=session.get(TOKEN_INFO, None) #return none if token_info is empty
