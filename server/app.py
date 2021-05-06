@@ -93,6 +93,41 @@ def mainpageorsmth():
     response.headers.add('Access-Control-Allow-Credentials', 'true')
     return response
 
+@app.route('/prevtracks')
+def prevtracks():
+    # print(get_token())
+    try:
+        token_info = get_token()
+    except:
+        print("user not logged in")
+        return {"Error": "Not logged in", "logged_in": False, "url": url_for('spotlogin', _external=True)}
+
+    sp = spotipy.Spotify(auth=token_info['access_token'],)
+    # make_response allows to pass headers
+    response = make_response(sp.current_user_recently_played(limit=10), 200)
+    # Need to change the hard coded url 
+    response.headers.add('Access-Control-Allow-Origin', 'http://localhost:8080')
+    response.headers.add('Access-Control-Allow-Credentials', 'true')
+    return response
+
+@app.route('/currtracks')
+def currtracks():
+    # print(get_token())
+    try:
+        token_info = get_token()
+    except:
+        print("user not logged in")
+        return {"Error": "Not logged in", "logged_in": False, "url": url_for('spotlogin', _external=True)}
+
+    sp = spotipy.Spotify(auth=token_info['access_token'],)
+    # make_response allows to pass headers
+    # need to add error handling for curr playing false
+    response = make_response(sp.current_user_playing_track(), 200)
+    # Need to change the hard coded url 
+    response.headers.add('Access-Control-Allow-Origin', 'http://localhost:8080')
+    response.headers.add('Access-Control-Allow-Credentials', 'true')
+    return response
+
 # @app.route('/current-track')
 # def currentTrack():
 #     try:
@@ -104,18 +139,6 @@ def mainpageorsmth():
 #     sp = spotipy.Spotify(auth=token_info['access_token'],)
 #     return {"data": sp.current_user_playing_track(), "logged_in": True}
 
-@app.route('/current-track', methods=['POST'])
-def currentTrack():
-    # try:
-    #     token_info= get_token()
-    # except:
-    #     print("user not logged in")
-    #     return {"Error": "Not logged in", "logged_in": False, "url": url_for('spotlogin', _external=True)}
-    #print (token_info)
-    print(request.get_json('token')['token'])
-    sp = spotipy.Spotify(auth=request.get_json('token')['token'])
-    
-    return {"data": sp.current_user_recently_played(), "logged_in": True}
 
 def get_token():
     token_info=session.get(TOKEN_INFO, None) #return none if token_info is empty

@@ -3,17 +3,17 @@
     <div class="current-track">
         <div class="container Friend-1">
             <div @click="showTracks=!showTracks" class="hovered name">
-                <strong>Dikshyant Pradhan</strong>
+                <strong>Bishakha</strong>
             </div>
             <div class="track">
                 <div>
                     <span class="hovered currSong"><strong>Current Track: </strong>
-                        <a v-bind:href="data.item.external_urls.spotify">
+                        <a v-bind:href="url">
                             <span class="trackName">
-                                {{data.item.name}}
+                                {{trackName}}
                             </span>
                             <span class="artistName">
-                                {{data.item.artists[0].name}}
+                                {{artistName}}
                             </span>
                         </a>
                     </span>
@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import Spotify from '@/services/Spotify'
+// import Spotify from '@/services/Spotify'
 import spot from '../json/curr-track.json'
 import PreviousTracks from '@/components/PreviousTracks'
 
@@ -44,55 +44,36 @@ export default {
     data() {
         return {
             data: spot.data,
-            url : spot.data.item.artists[0].external_urls.spotify,
-            track: {},
+            url : '',
+            trackName: "",
             showTracks : false,
+            artistName: "",
         }
     },
 
-    async trackInfo() {
-      try {
-        const response = await Spotify.getCurrentTrack()
-        console.log(response)
-        const results = response.data.results
-        console.log(results)
-      } catch (err) {
-        if (err.response) {
-          // client received an error response (5xx, 4xx)
-          console.log("Server Error:", err)
-        } else if (err.request) {
-          // client never received a response, or request never left
-          console.log("Network Error:", err)
-        } else {
-          console.log("Client Error:", err)
-        }
-      }
+    async mounted(){
+        fetch('http://localhost:5000/currtracks', {
+            method: 'GET',
+            headers: {
+            'Content-Type': 'application/json',
+            },
+            mode: 'cors',
+            credentials: 'include',
+            // body: JSON.stringify(data),
+            })
+            .then(response => response.json())
+            .then(data => {
+                this.url = data.item.external_urls.spotify
+                this.trackName= data.item.name
+                this.artistName = data.item.artists[0].name
+                console.log('Success:', data);
+            })
+            .catch((error) => {
+            console.error('Error:', error);
+        });
     },
     
-    // created: async function() {
-    //          fetch("http://localhost:5000/mainpageorsmth").then(response => {
-    //              response.json().then(data=>{
-    //                  if (!data.logged_in){
-    //                      console.log(data); 
-    //                      window.open(data.url)
-    //                     //  setTimeout(function() {
-    //                     //     wnd.close();
-    //                     // }, 1000000)
-    //                  }
-    //                  console.log(data)}); 
-    //          },response=>{
-    //              console.log("Not logged in");
-    //              console.log(response.url);
-    //          })
-
-             
-            //  this.url = val.url;
-            //  window.open(this.url);
-            // }
-
-    // mounted(){
-    //     Spotify.completeLogin()
-    // }
+    
 }
 
     
@@ -179,9 +160,9 @@ a{
      color: inherit;
  }
 
-/* .trackName{
-    float: right;
-} */
+.trackName{
+    margin-right: 0.5em;
+}
 
 
 </style>
