@@ -48,11 +48,12 @@ export default {
             trackName: "",
             showTracks : false,
             artistName: "",
+            currTracksUrl: process.env.VUE_APP_API_ENDPOINT + "/currtracks"
         }
     },
 
     async mounted(){
-        fetch('http://localhost:5000/currtracks', {
+        fetch(this.currTracksUrl, {
             method: 'GET',
             headers: {
             'Content-Type': 'application/json',

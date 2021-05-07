@@ -28,6 +28,7 @@ export default {
     return {
       users: {},
       showWordIndex: null,
+      url: process.env.VUE_APP_API_ENDPOINT + "/prevtracks"
     };
   },
   methods:{
@@ -39,7 +40,7 @@ export default {
         },
   },
         async mounted(){
-        fetch('http://localhost:5000/prevtracks', {
+        fetch(this.url, {
             method: 'GET',
             headers: {
             'Content-Type': 'application/json',

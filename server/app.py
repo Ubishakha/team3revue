@@ -74,7 +74,7 @@ def redirectpage():
     print('i reached here')
     session[TOKEN_INFO]=token_info
     response = make_response(redirect('/mainpageorsmth'))
-    return response
+    return "Go back and refresh the main page"
 
 @app.route('/mainpageorsmth')
 def mainpageorsmth():
