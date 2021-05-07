@@ -35,7 +35,7 @@ app.config["SECRET_KEY"] = config.flask_secret_key
 app.config['SESSION_COOKIE_NAME']= 'Spoti-fi Cookie'
 app.config['SESSION_COOKIE_HTTPONLY'] = True
 # cors = CORS(app, origins=['http://localhost:5000', 'http://localhost:8080'], supports_credentials=True)
-cors = CORS(app, origins=[process.env.VUE_APP_API_ENDPOINT, 'https://ubishakha.github.io/team3revue/'], supports_credentials=True)
+cors = CORS(app, origins=[config.api_endpoint, config.frontend_url], supports_credentials=True)
 TOKEN_INFO='token_info'
 
 
@@ -90,7 +90,8 @@ def mainpageorsmth():
     # make_response allows to pass headers
     response = make_response(sp.current_user_recently_played(limit=10), 200)
     # Need to change the hard coded url 
-    response.headers.add('Access-Control-Allow-Origin', 'https://ubishakha.github.io/team3revue/')
+     # response.headers.add('Access-Control-Allow-Origin', 'http://localhost:8080')
+    response.headers.add('Access-Control-Allow-Origin', config.frontend_url)
     response.headers.add('Access-Control-Allow-Credentials', 'true')
     return response
 
@@ -106,8 +107,10 @@ def prevtracks():
     sp = spotipy.Spotify(auth=token_info['access_token'],)
     # make_response allows to pass headers
     response = make_response(sp.current_user_recently_played(limit=10), 200)
-    # Need to change the hard coded url 
-    response.headers.add('Access-Control-Allow-Origin', 'https://ubishakha.github.io/team3revue/')
+    # Need to change the hard coded url
+    
+    # response.headers.add('Access-Control-Allow-Origin', 'http://localhost:8080')
+    response.headers.add('Access-Control-Allow-Origin', config.frontend_url)
     response.headers.add('Access-Control-Allow-Credentials', 'true')
     return response
 
@@ -125,7 +128,8 @@ def currtracks():
     # need to add error handling for curr playing false
     response = make_response(sp.current_user_playing_track(), 200)
     # Need to change the hard coded url 
-    response.headers.add('Access-Control-Allow-Origin', 'https://ubishakha.github.io/team3revue/')
+     # response.headers.add('Access-Control-Allow-Origin', 'http://localhost:8080')
+    response.headers.add('Access-Control-Allow-Origin', config.frontend_url)
     response.headers.add('Access-Control-Allow-Credentials', 'true')
     return response
 
