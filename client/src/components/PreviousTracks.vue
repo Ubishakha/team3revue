@@ -1,5 +1,6 @@
 <template lang="html">
   <div class="prev-tracks">
+      <!-- <button @click="prevTracks">Click me</button> -->
         <li v-for="(item, index) in users.items" v-bind:key="index">
             <span v-if="showWordIndex === index" class= "playBtn">
                     <a v-bind:href="url">
@@ -18,27 +19,46 @@
 
 <script>
 // import Spotify from '@/services/Spotify'
-import spot from '../json/prev-tracks.json'
+// import spot from '../json/prev-tracks.json'
 
 export default {
     name: 'prev-tracks',
     
     data() {
     return {
-      users: spot,
+      users: {},
       showWordIndex: null,
-      
+      url: process.env.VUE_APP_API_ENDPOINT + "/prevtracks"
     };
   },
   methods:{
-      mouseEnter: function(){
+        mouseEnter: function(){
             this.hovered = !this.hovered;   
         },
         mouseLeave: function(){
             this.hovered = false;   
-        }
-  }
-    
+        },
+  },
+        async mounted(){
+        fetch(this.url, {
+            method: 'GET',
+            headers: {
+            'Content-Type': 'application/json',
+            },
+            mode: 'cors',
+            credentials: 'include',
+            // body: JSON.stringify(data),
+            })
+            .then(response => response.json())
+            .then(data => {
+                this.users = data
+                // console.log(this.users)
+                console.log('Success:', data);
+            })
+            .catch((error) => {
+            console.error('Error:', error);
+        });
+    },
 }
 
     

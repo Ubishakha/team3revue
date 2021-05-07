@@ -2,8 +2,8 @@
   <div class="outer-wrapper"> 
       <h1>Dashboard</h1>
        <div>
-    <input class="button connect" @click="connectToSpotify" type="submit" value="Get Data">
-    <button> <a :href="url"> Login To Spotify </a> </button>
+    <!-- <input class="button connect" @click="connectToSpotify" type="submit" value="Get Data"> -->
+    <button> <a :href="url" target="_blank"> Login To Spotify </a> </button>
   </div>
       <div class="wrapper"> 
         
@@ -40,7 +40,7 @@ export default {
     }
   },
 
-  methods:{
+  // methods:{
     // async connectToSpotify(){
     //   fetch('http://localhost:5000/current-track', {
     //     method: 'POST',
@@ -57,8 +57,8 @@ export default {
     //     .catch((error) => {
     //     console.error('Error:', error);
     //     });
-    async connectToSpotify(){
-      fetch('http://localhost:5000/mainpageorsmth', {
+    async mounted(){
+      fetch(this.url, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -74,33 +74,7 @@ export default {
         .catch((error) => {
           console.error('Error:', error);
         });
-  },
-  
-  created() {
-    this.friendQueue = [ //Fill in this array with the information from the user
-      {
-        id: 1, //user id
-        name: 'Justin Garcia', //friend's name, potentially register the user as one of these objects
-        currSong: 'Mood Swings by A Boogie',
       },
-      {
-        id: 2,
-        name: 'DK',
-        currSong: 'Up by Dro Kenji'
-      },
-      {
-        id: 3,
-        name: 'Bishakha',
-        currSong: 'El Portal by Caleborate'
-      },
-      {
-        id: 4,
-        name: 'Khue',
-        currSong: 'Ruby Red by Smino'
-      }
-    ]
-  }
-  }
 
 }
 </script>
