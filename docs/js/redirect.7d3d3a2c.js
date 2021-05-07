@@ -1,2 +1,0 @@
-(window["webpackJsonp"]=window["webpackJsonp"]||[]).push([["redirect"],{1503:function(e,t,n){"use strict";n.r(t);var r=n("7a23"),c={class:"redirect"},o=Object(r["h"])("p",null,"Close the window",-1);function i(e,t,n,i,d,u){return Object(r["q"])(),Object(r["d"])("div",c,[o])}var d=n("b7fb"),u={name:"redirect",data:function(){return{}},mounted:function(){var e=this.$route.query.code;d["a"].completeLogin(e)}};u.render=i;t["default"]=u}}]);
-//# sourceMappingURL=redirect.7d3d3a2c.js.map
