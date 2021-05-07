@@ -19,14 +19,14 @@
 
 <script>
 // import Spotify from '@/services/Spotify'
-// import spot from '../json/prev-tracks.json'
+import spot from '../json/prev-tracks.json'
 
 export default {
     name: 'prev-tracks',
     
     data() {
     return {
-      users: {},
+      users: spot,
       showWordIndex: null,
       url: process.env.VUE_APP_API_ENDPOINT + "/prevtracks"
     };

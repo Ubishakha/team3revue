@@ -44,10 +44,10 @@ export default {
     data() {
         return {
             data: spot.data,
-            url : '',
-            trackName: "",
+            url : spot.data.item.external_urls.spotify,
+            trackName: spot.data.item.name,
             showTracks : false,
-            artistName: "",
+            artistName: spot.data.item.artists[0].name,
             currTracksUrl: process.env.VUE_APP_API_ENDPOINT + "/currtracks"
         }
     },
