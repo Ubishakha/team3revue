@@ -2,8 +2,8 @@
   <div class="outer-wrapper"> 
       <h1>Dashboard</h1>
        <div>
-    <input class="button connect" @click="connectToSpotify" type="submit" value="Get Data">
-    <button> <a href="http://localhost:5000/spotlogin"> Login </a> </button>
+    <!-- <input class="button connect" @click="connectToSpotify" type="submit" value="Get Data"> -->
+    <button> <a :href="url" target="_blank"> Login To Spotify </a> </button>
   </div>
       <div class="wrapper"> 
         
@@ -32,44 +32,49 @@ export default {
   name: 'home',
 
   components: { FriendLists,CurrentTrack },
-
-  methods:{
-    connectToSpotify(){
-      fetch("http://localhost:5000/mainpageorsmth").then(response => response.json())
-        .then(data => console.log(data));
-    },
-
+  
   data() {
     return {
-      friendQueue: [] //This needs to be filled with the data from the spotify api
+      friendQueue: [], //This needs to be filled with the data from the spotify api
+      url: process.env.VUE_APP_API_ENDPOINT + "/spotlogin"
     }
   },
-  
-  created() {
-    this.friendQueue = [ //Fill in this array with the information from the user
-      {
-        id: 1, //user id
-        name: 'Justin Garcia', //friend's name, potentially register the user as one of these objects
-        currSong: 'Mood Swings by A Boogie',
+
+  // methods:{
+    // async connectToSpotify(){
+    //   fetch('http://localhost:5000/current-track', {
+    //     method: 'POST',
+    //     body: JSON.stringify({token: 'BQDVNTuSTn3m3aFdrQaoy26hPzD4vIj2okXy773N17cSdgKbWRo_e3xNHefvJ7PtOLO1GrqVqZhdrtPMSpzqM7wAOWx2mEm409jtHTWle_u2iPc8yI5RBmJ7cka1iZRAd_1Cr7F3QFsK-7RPhP73z6NFJZ3k1GT_6JgaPTUji6zmOJf3VMA'}),
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //     },
+    //     credentials: "same-origin",
+    //     })
+    //     .then(response => response.json())
+    //     .then(data => {
+    //     console.log('Success:', data);
+    //     })
+    //     .catch((error) => {
+    //     console.error('Error:', error);
+    //     });
+    async mounted(){
+      fetch(this.url, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        mode: 'cors',
+        credentials: 'include',
+        // body: JSON.stringify(data),
+        })
+        .then(response => response.json())
+        .then(data => {
+          console.log('Success:', data);
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+        });
       },
-      {
-        id: 2,
-        name: 'DK',
-        currSong: 'Up by Dro Kenji'
-      },
-      {
-        id: 3,
-        name: 'Bishakha',
-        currSong: 'El Portal by Caleborate'
-      },
-      {
-        id: 4,
-        name: 'Khue',
-        currSong: 'Ruby Red by Smino'
-      }
-    ]
-  }
-  }
 
 }
 </script>
