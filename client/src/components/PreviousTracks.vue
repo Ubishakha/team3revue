@@ -39,26 +39,26 @@ export default {
             this.hovered = false;   
         },
   },
-        async mounted(){
-        fetch(this.url, {
-            method: 'GET',
-            headers: {
-            'Content-Type': 'application/json',
-            },
-            mode: 'cors',
-            credentials: 'include',
-            // body: JSON.stringify(data),
-            })
-            .then(response => response.json())
-            .then(data => {
-                this.users = data
-                // console.log(this.users)
-                console.log('Success:', data);
-            })
-            .catch((error) => {
-            console.error('Error:', error);
-        });
-    },
+    //     async mounted(){
+    //     fetch(this.url, {
+    //         method: 'GET',
+    //         headers: {
+    //         'Content-Type': 'application/json',
+    //         },
+    //         mode: 'cors',
+    //         credentials: 'include',
+    //         // body: JSON.stringify(data),
+    //         })
+    //         .then(response => response.json())
+    //         .then(data => {
+    //             this.users = data
+    //             // console.log(this.users)
+    //             console.log('Success:', data);
+    //         })
+    //         .catch((error) => {
+    //         console.error('Error:', error);
+    //     });
+    // },
 }
 
     

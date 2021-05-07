@@ -57,24 +57,24 @@ export default {
     //     .catch((error) => {
     //     console.error('Error:', error);
     //     });
-    async mounted(){
-      fetch(this.url, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        mode: 'cors',
-        credentials: 'include',
-        // body: JSON.stringify(data),
-        })
-        .then(response => response.json())
-        .then(data => {
-          console.log('Success:', data);
-        })
-        .catch((error) => {
-          console.error('Error:', error);
-        });
-      },
+    // async mounted(){
+    //   fetch(this.url, {
+    //     method: 'GET',
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //     },
+    //     mode: 'cors',
+    //     credentials: 'include',
+    //     // body: JSON.stringify(data),
+    //     })
+    //     .then(response => response.json())
+    //     .then(data => {
+    //       console.log('Success:', data);
+    //     })
+    //     .catch((error) => {
+    //       console.error('Error:', error);
+    //     });
+    //   },
 
 }
 </script>

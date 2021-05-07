@@ -52,27 +52,27 @@ export default {
         }
     },
 
-    async mounted(){
-        fetch(this.currTracksUrl, {
-            method: 'GET',
-            headers: {
-            'Content-Type': 'application/json',
-            },
-            mode: 'cors',
-            credentials: 'include',
-            // body: JSON.stringify(data),
-            })
-            .then(response => response.json())
-            .then(data => {
-                this.url = data.item.external_urls.spotify
-                this.trackName= data.item.name
-                this.artistName = data.item.artists[0].name
-                console.log('Success:', data);
-            })
-            .catch((error) => {
-            console.error('Error:', error);
-        });
-    },
+    // async mounted(){
+    //     fetch(this.currTracksUrl, {
+    //         method: 'GET',
+    //         headers: {
+    //         'Content-Type': 'application/json',
+    //         },
+    //         mode: 'cors',
+    //         credentials: 'include',
+    //         // body: JSON.stringify(data),
+    //         })
+    //         .then(response => response.json())
+    //         .then(data => {
+    //             this.url = data.item.external_urls.spotify
+    //             this.trackName= data.item.name
+    //             this.artistName = data.item.artists[0].name
+    //             console.log('Success:', data);
+    //         })
+    //         .catch((error) => {
+    //         console.error('Error:', error);
+    //     });
+    // },
     
     
 }
