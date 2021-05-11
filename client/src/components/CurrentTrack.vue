@@ -33,7 +33,7 @@
 
 <script>
 // import Spotify from '@/services/Spotify'
-import spot from '../json/curr-track.json'
+// import spot from '../json/curr-track.json'
 import PreviousTracks from '@/components/PreviousTracks'
 
 export default {
@@ -43,7 +43,7 @@ export default {
 
     data() {
         return {
-            data: spot.data,
+            // data: spot.data,
             url : '',
             trackName: "",
             showTracks : false,
@@ -64,10 +64,11 @@ export default {
             })
             .then(response => response.json())
             .then(data => {
+                console.log('Success:', data);
                 this.url = data.item.external_urls.spotify
                 this.trackName= data.item.name
                 this.artistName = data.item.artists[0].name
-                console.log('Success:', data);
+                console.log('Success:Loaded');
             })
             .catch((error) => {
             console.error('Error:', error);
