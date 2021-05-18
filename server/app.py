@@ -12,6 +12,9 @@ from flask_cors import CORS
 import spotipy
 from spotipy.oauth2 import SpotifyAuthBase, SpotifyOAuth
 import time
+import jwt
+from models import User
+from schema import Schema, Regex
 #TODO: Check if CORS is properly set in vue
 
 class CustomJSONEncoder(JSONEncoder):
@@ -34,8 +37,8 @@ app.json_encoder = CustomJSONEncoder
 app.config["SECRET_KEY"] = config.flask_secret_key
 app.config['SESSION_COOKIE_NAME']= 'Spoti-fi Cookie'
 app.config['SESSION_COOKIE_HTTPONLY'] = True
-# cors = CORS(app, origins=['http://localhost:5000', 'http://localhost:8080'], supports_credentials=True)
-cors = CORS(app, origins=[config.api_endpoint, config.frontend_url], supports_credentials=True)
+cors = CORS(app, origins=['http://localhost:5000', 'http://localhost:8080'], supports_credentials=True)
+# cors = CORS(app, origins=[config.api_endpoint, config.frontend_url], supports_credentials=True)
 TOKEN_INFO='token_info'
 
 
@@ -52,46 +55,56 @@ import errors  # noqa
 
 @app.route('/')
 def basic():
-    return redirect('spotlogin')
+    return "Go"
 
 #----------------------------------SpotifyOauth--------------
-@app.route('/spotlogin')
-def spotlogin():
+@app.route('/spotlogin', methods=["POST"])
+@login_required
+def spotlogin(username):
     #connect spotify account to the app
-    sp_oauth= create_spotify_oauth()        #creates oauth token
+    sp_oauth= create_spotify_oauth(username)        #creates oauth token
     auth_url = sp_oauth.get_authorize_url()
     print(auth_url)
-    return redirect(auth_url)       #redirects to the authurl which we specified in the create_spotify_oauth function
+    return jsonify(auth_url)       #redirects to the authurl which we specified in the create_spotify_oauth function
 
 @app.route('/redirect')
 def redirectpage():
-    sp_oauth= create_spotify_oauth()
+    
     session.clear()
     # print(request.json)
     # code = request.json.get("content")
     code = request.args.get('code')
-    print('i got here first!!!!')
+    code2 = request.args.get('state')
+    print(code)
+    sp_oauth= create_spotify_oauth(code2)
     token_info = sp_oauth.get_access_token(code)
-    print('i reached here')
+    print(token_info)
+    # add token and username to db
+    # schema = Schema({
+    #     "spotifyToken": str,
+    # })
+    # validated = schema.validate(request.json)
     session[TOKEN_INFO]=token_info
-    response = make_response(redirect('/mainpageorsmth'))
-    return "Go back and refresh the main page"
+    
+    # response = make_response(redirect('/mainpageorsmth'))
+    response = make_response('id')
+    return response
 
-@app.route('/mainpageorsmth')
-def mainpageorsmth():
+@app.route('/mainpageorsmth/<id>')
+def mainpageorsmth(id):
     # print(get_token())
-    try:
-        token_info = get_token()
-    except:
-        print("user not logged in")
-        return {"Error": "Not logged in", "logged_in": False, "url": url_for('spotlogin', _external=True)}
+    # try:
+    token_info = get_token(id)
+    # except:
+    #     print("user not logged in")
+    #     return {"Error": "Not logged in", "logged_in": False, "url": url_for('spotlogin', _external=True)}
 
     sp = spotipy.Spotify(auth=token_info['access_token'],)
     # make_response allows to pass headers
     response = make_response(sp.current_user_recently_played(limit=10), 200)
     # Need to change the hard coded url 
-     # response.headers.add('Access-Control-Allow-Origin', 'http://localhost:8080')
-    response.headers.add('Access-Control-Allow-Origin', config.frontend_url)
+    response.headers.add('Access-Control-Allow-Origin', 'http://localhost:8080')
+    # response.headers.add('Access-Control-Allow-Origin', config.frontend_url)
     response.headers.add('Access-Control-Allow-Credentials', 'true')
     return response
 
@@ -109,8 +122,8 @@ def prevtracks():
     response = make_response(sp.current_user_recently_played(limit=10), 200)
     # Need to change the hard coded url
     
-    # response.headers.add('Access-Control-Allow-Origin', 'http://localhost:8080')
-    response.headers.add('Access-Control-Allow-Origin', config.frontend_url)
+    response.headers.add('Access-Control-Allow-Origin', 'http://localhost:8080')
+    # response.headers.add('Access-Control-Allow-Origin', config.frontend_url)
     response.headers.add('Access-Control-Allow-Credentials', 'true')
     return response
 
@@ -128,8 +141,8 @@ def currtracks():
     # need to add error handling for curr playing false
     response = make_response(sp.current_user_playing_track(), 200)
     # Need to change the hard coded url 
-     # response.headers.add('Access-Control-Allow-Origin', 'http://localhost:8080')
-    response.headers.add('Access-Control-Allow-Origin', config.frontend_url)
+    response.headers.add('Access-Control-Allow-Origin', 'http://localhost:8080')
+    # response.headers.add('Access-Control-Allow-Origin', config.frontend_url)
     response.headers.add('Access-Control-Allow-Credentials', 'true')
     return response
 
@@ -145,7 +158,8 @@ def currtracks():
 #     return {"data": sp.current_user_playing_track(), "logged_in": True}
 
 
-def get_token():
+def get_token(id):
+    # get token from the db
     token_info=session.get(TOKEN_INFO, None) #return none if token_info is empty
     if token_info == None:
         raise exception
@@ -159,12 +173,13 @@ def get_token():
 
 
 #everytime you use spotifyoauth use a new one.
-def create_spotify_oauth():
+def create_spotify_oauth(username):
     return SpotifyOAuth(
         client_id = "0e5b6e912af94415ba75116ea413538e",
         client_secret="59b70f0753fb43cb9d0fc922af134897",
         redirect_uri=url_for('redirectpage', _external=True), #...../redirectpage/
-        scope="user-top-read , user-read-currently-playing, user-read-recently-played")                   
+        scope="user-top-read , user-read-currently-playing, user-read-recently-played",
+        state= username)                  
 
 
 
@@ -180,6 +195,7 @@ def page_not_found(e):
 @app.errorhandler(500)
 @app.errorhandler(405)
 def internal_server_error(e):
+    print(e)
     return jsonify({
         "error": "Internal server error"
     }), 500
