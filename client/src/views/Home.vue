@@ -3,7 +3,7 @@
       <h1>Dashboard</h1>
        <div>
     <!-- <input class="button connect" @click="connectToSpotify" type="submit" value="Get Data"> -->
-    <button> <a :href="url" target="_blank"> Login To Spotify </a> </button>
+    <input class="button connect" @click = "fn" type="submit" value="Login To Spotify">
   </div>
       <div class="wrapper"> 
         
@@ -36,45 +36,34 @@ export default {
   data() {
     return {
       friendQueue: [], //This needs to be filled with the data from the spotify api
-      url: process.env.VUE_APP_API_ENDPOINT + "/spotlogin"
+      url: process.env.VUE_APP_API_ENDPOINT + "/spotlogin",
+      username: this.$store.state.user.username
     }
   },
-
-  // methods:{
-    // async connectToSpotify(){
-    //   fetch('http://localhost:5000/current-track', {
-    //     method: 'POST',
-    //     body: JSON.stringify({token: 'BQDVNTuSTn3m3aFdrQaoy26hPzD4vIj2okXy773N17cSdgKbWRo_e3xNHefvJ7PtOLO1GrqVqZhdrtPMSpzqM7wAOWx2mEm409jtHTWle_u2iPc8yI5RBmJ7cka1iZRAd_1Cr7F3QFsK-7RPhP73z6NFJZ3k1GT_6JgaPTUji6zmOJf3VMA'}),
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //     },
-    //     credentials: "same-origin",
-    //     })
-    //     .then(response => response.json())
-    //     .then(data => {
-    //     console.log('Success:', data);
-    //     })
-    //     .catch((error) => {
-    //     console.error('Error:', error);
-    //     });
-    async mounted(){
+  methods:{
+    fn(){
+      // alert(this.username);
       fetch(this.url, {
-        method: 'GET',
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `JWT ${this.$store.state.token}`
         },
         mode: 'cors',
         credentials: 'include',
-        // body: JSON.stringify(data),
+        body: JSON.stringify(this.username),
+        
         })
         .then(response => response.json())
         .then(data => {
           console.log('Success:', data);
+          window.open(data);
         })
         .catch((error) => {
           console.error('Error:', error);
         });
       },
+  },
 
 }
 </script>

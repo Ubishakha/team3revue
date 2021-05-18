@@ -55,50 +55,49 @@ import errors  # noqa
 
 @app.route('/')
 def basic():
-    return redirect('spotlogin')
+    return "Go"
 
 #----------------------------------SpotifyOauth--------------
-@app.route('/spotlogin')
+@app.route('/spotlogin', methods=["POST"])
 @login_required
 def spotlogin(username):
     #connect spotify account to the app
     sp_oauth= create_spotify_oauth(username)        #creates oauth token
     auth_url = sp_oauth.get_authorize_url()
     print(auth_url)
-    return redirect(auth_url)       #redirects to the authurl which we specified in the create_spotify_oauth function
+    return jsonify(auth_url)       #redirects to the authurl which we specified in the create_spotify_oauth function
 
 @app.route('/redirect')
 def redirectpage():
-    sp_oauth= create_spotify_oauth()
+    
     session.clear()
     # print(request.json)
     # code = request.json.get("content")
     code = request.args.get('code')
     code2 = request.args.get('state')
-    print(code2)
+    print(code)
+    sp_oauth= create_spotify_oauth(code2)
     token_info = sp_oauth.get_access_token(code)
-    print('i reached here')
+    print(token_info)
     # add token and username to db
-    schema = Schema({
-        "spotifyToken": str
-    })
-    validated = schema.validate(request.json)
-
-    user = User(
-        spotifyToken = 
-    )
-    # session[TOKEN_INFO]=token_info
-    response = make_response(redirect('/mainpageorsmth'))
-    return "Go back and refresh the main page"
+    # schema = Schema({
+    #     "spotifyToken": str,
+    # })
+    # validated = schema.validate(request.json)
+    session[TOKEN_INFO]=token_info
+    
+    # response = make_response(redirect('/mainpageorsmth'))
+    response = make_response('id')
+    return response
 
 @app.route('/mainpageorsmth/<id>')
 def mainpageorsmth(id):
     # print(get_token())
-    try:
-        token_info = get_token(id)
-    except:
-        print("user not logged in")
-        return {"Error": "Not logged in", "logged_in": False, "url": url_for('spotlogin', _external=True)}
+    # try:
+    token_info = get_token(id)
+    # except:
+    #     print("user not logged in")
+    #     return {"Error": "Not logged in", "logged_in": False, "url": url_for('spotlogin', _external=True)}
 
     sp = spotipy.Spotify(auth=token_info['access_token'],)
     # make_response allows to pass headers
@@ -196,6 +195,7 @@ def page_not_found(e):
 @app.errorhandler(500)
 @app.errorhandler(405)
 def internal_server_error(e):
+    print(e)
     return jsonify({
         "error": "Internal server error"
     }), 500
