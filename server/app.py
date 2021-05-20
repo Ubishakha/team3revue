@@ -37,7 +37,7 @@ app.json_encoder = CustomJSONEncoder
 app.config["SECRET_KEY"] = config.flask_secret_key
 app.config['SESSION_COOKIE_NAME']= 'Spoti-fi Cookie'
 app.config['SESSION_COOKIE_HTTPONLY'] = True
-cors = CORS(app, origins=['http://localhost:5000', 'http://localhost:8080'], supports_credentials=True)
+cors = CORS(app, origins=['http://localhost:5000', 'http://localhost:8080', 'http://localhost:80'], supports_credentials=True)
 # cors = CORS(app, origins=[config.api_endpoint, config.frontend_url], supports_credentials=True)
 TOKEN_INFO='token_info'
 
@@ -69,29 +69,41 @@ def spotlogin(username):
 
 @app.route('/redirect')
 def redirectpage():
-    
     session.clear()
     # print(request.json)
     # code = request.json.get("content")
     code = request.args.get('code')
-    code2 = request.args.get('state')
+    username = request.args.get('state')
     print(code)
-    sp_oauth= create_spotify_oauth(code2)
+    sp_oauth= create_spotify_oauth(username)
     token_info = sp_oauth.get_access_token(code)
     print(token_info)
+    # print(token_info)
     # add token and username to db
-    # schema = Schema({
-    #     "spotifyToken": str,
-    # })
-    # validated = schema.validate(request.json)
-    session[TOKEN_INFO]=token_info
+    schema = Schema({
+        "username": str
+    })
+    validated = schema.validate(username)
+
+    users = User.objects(username=validated["username"])
+    
+    if len(users) == 0:
+        return jsonify({"error": "User not found"}), 403
+
+    user = users.first()
+    
+    user.spotifyToken = token_info
+    
+    user.save()
+
     
     # response = make_response(redirect('/mainpageorsmth'))
     response = make_response('id')
     return response
 
-@app.route('/mainpageorsmth/<id>')
-def mainpageorsmth(id):
+@app.route('/mainpageorsmth/', methods=["POST"])
+@login_required
+def mainpageorsmth(username):
     # print(get_token())
     # try:
     token_info = get_token(id)
@@ -213,3 +225,7 @@ if __name__ == "__main__":
     ENVIRONMENT_DEBUG = os.environ.get("APP_DEBUG", True)
     ENVIRONMENT_PORT = os.environ.get("APP_PORT", 5000)
     app.run(host='0.0.0.0', port=ENVIRONMENT_PORT, debug=ENVIRONMENT_DEBUG)
+
+
+
+    #new changes were made

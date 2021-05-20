@@ -6,12 +6,18 @@ from mongoengine import (
     connect, Document, EmailField, StringField, ListField, ReferenceField, DateTimeField, EmbeddedDocument,
     EmbeddedDocumentField, CASCADE
 )
+import mongoengine
 
 username = os.environ.get('MONGODB_USERNAME')
 password = os.environ.get('MONGODB_PASSWORD')
 host = os.environ.get('MONGODB_HOSTNAME')
+#host = 'mongodb://127.0.0.1:27017/'
 db = os.environ.get('MONGODB_DATABASE', "revue")
 connect(username=username, password=password, host=host, db=db)
+
+
+# class Comment(EmbeddedDocument):
+    
 
 class User(Document):
     email = EmailField(required=True, unique=True)
