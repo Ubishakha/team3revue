@@ -4,6 +4,7 @@
        <div>
     <!-- <input class="button connect" @click="connectToSpotify" type="submit" value="Get Data"> -->
     <input class="button connect" @click = "fn" type="submit" value="Login To Spotify">
+    <input class="button connect" @click = "fn2" type="submit" value="Get">
   </div>
       <div class="wrapper"> 
         
@@ -37,6 +38,7 @@ export default {
     return {
       friendQueue: [], //This needs to be filled with the data from the spotify api
       url: process.env.VUE_APP_API_ENDPOINT + "/spotlogin",
+      url2: process.env.VUE_APP_API_ENDPOINT + "/mainpageorsmth",
       username: this.$store.state.user.username
     }
   },
@@ -58,6 +60,26 @@ export default {
         .then(data => {
           console.log('Success:', data);
           window.open(data);
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+        });
+      },
+  fn2(){
+      // alert(this.username);
+      fetch(this.url2, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `JWT ${this.$store.state.token}`
+        },
+        mode: 'cors',
+        credentials: 'include',
+        body: JSON.stringify(this.username),
+        })
+        .then(response => response.json())
+        .then(data => {
+          console.log('Success:', data);
         })
         .catch((error) => {
           console.error('Error:', error);

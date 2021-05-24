@@ -11,7 +11,7 @@ services:
       APP_ENV: "dev"
       APP_DEBUG: "true"
       APP_PORT: 5000
-      FLASK_ENV: "DEVELOPMENT"
+      FLASK_ENV: "development"
       MONGODB_DATABASE: revue
       MONGODB_USERNAME: flaskuser
       MONGODB_PASSWORD: passwd123
@@ -24,7 +24,10 @@ services:
       - frontend
       - backend
   mongodb:
-    image: mongo:4.0.8
+    image: knox.edu/mongo
+    build: 
+      context: Mongo 
+      dockerfile: Dockerfile   
     container_name: mongodb
     restart: unless-stopped
     command: mongod -v --auth

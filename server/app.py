@@ -2,11 +2,16 @@ from logging import exception
 from requests.sessions import Session
 import config
 import os
-
+import json
 from datetime import date
 from flask import Flask, jsonify, send_from_directory, request, url_for, session, redirect, make_response
 from flask.json import JSONEncoder
 from flask_cors import CORS
+
+
+#Print in docker
+import sys
+sys.stdout.flush()
 
 #--------------extra imports
 import spotipy
@@ -74,17 +79,22 @@ def redirectpage():
     # code = request.json.get("content")
     code = request.args.get('code')
     username = request.args.get('state')
-    print(code)
     sp_oauth= create_spotify_oauth(username)
     token_info = sp_oauth.get_access_token(code)
-    print(token_info)
+
+    #store into database
+
+    data = {
+            "username": username
+    }
+
+
     # print(token_info)
     # add token and username to db
     schema = Schema({
         "username": str
     })
-    validated = schema.validate(username)
-
+    validated = schema.validate(data)
     users = User.objects(username=validated["username"])
     
     if len(users) == 0:
@@ -92,33 +102,35 @@ def redirectpage():
 
     user = users.first()
     
-    user.spotifyToken = token_info
+    tokens = json.dumps(token_info)
+
+    user.spotifyToken = tokens
     
     user.save()
 
     
     # response = make_response(redirect('/mainpageorsmth'))
-    response = make_response('id')
+    response = make_response(username)
     return response
 
 @app.route('/mainpageorsmth/', methods=["POST"])
 @login_required
 def mainpageorsmth(username):
     # print(get_token())
-    # try:
-    token_info = get_token(id)
-    # except:
-    #     print("user not logged in")
+    try:
+        token_info = get_token(username)
+    except:
+         print("user not logged in")
     #     return {"Error": "Not logged in", "logged_in": False, "url": url_for('spotlogin', _external=True)}
 
     sp = spotipy.Spotify(auth=token_info['access_token'],)
     # make_response allows to pass headers
     response = make_response(sp.current_user_recently_played(limit=10), 200)
     # Need to change the hard coded url 
-    response.headers.add('Access-Control-Allow-Origin', 'http://localhost:8080')
+    # response.headers.add('Access-Control-Allow-Origin', 'http://localhost:8080')
     # response.headers.add('Access-Control-Allow-Origin', config.frontend_url)
-    response.headers.add('Access-Control-Allow-Credentials', 'true')
-    return response
+    # response.headers.add('Access-Control-Allow-Credentials', 'true')
+    return jsonify(response)
 
 @app.route('/prevtracks')
 def prevtracks():
@@ -170,9 +182,31 @@ def currtracks():
 #     return {"data": sp.current_user_playing_track(), "logged_in": True}
 
 
-def get_token(id):
-    # get token from the db
-    token_info=session.get(TOKEN_INFO, None) #return none if token_info is empty
+def get_token(username):
+    #get from database
+    data = {        
+            "username": username
+    }
+
+    schema = Schema({
+        "username": str
+    })
+    validated = schema.validate(data)
+    users = User.objects(username=validated["username"])
+
+    # if len(users) == 0:
+    #     return jsonify({"error": "User not found"}), 403
+
+    user = users.first()
+
+    tokens= user.spotifyToken
+
+    print (tokens)
+
+    token_info = json.loads(tokens)
+    # token_info=session.get(TOKEN_INFO, None) #return none if token_info is empty
+    
+    
     if token_info == None:
         raise exception
     now = int(time.time())
@@ -181,6 +215,7 @@ def get_token(id):
     if (is_expired):
         sp_oauth= create_spotify_oauth()
         token_info= sp_oauth.refresh_access_token(token_info['refresh_token'])
+    print(type(token_info))
     return token_info
 
 
@@ -224,8 +259,8 @@ def request_entity_too_large(e):
 if __name__ == "__main__":
     ENVIRONMENT_DEBUG = os.environ.get("APP_DEBUG", True)
     ENVIRONMENT_PORT = os.environ.get("APP_PORT", 5000)
-    app.run(host='0.0.0.0', port=ENVIRONMENT_PORT, debug=ENVIRONMENT_DEBUG)
+    app.run(host='0.0.0.0', port=ENVIRONMENT_PORT, debug= True)
+    #ENVIRONMENT_DEBUG)
 
 
 
-    #new changes were made
