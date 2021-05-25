@@ -71,7 +71,7 @@ export default {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `JWT ${this.$store.state.token}`
+          'Authorization': `JWT ${this.$store.state.token}`,
         },
         mode: 'cors',
         credentials: 'include',

@@ -48,19 +48,21 @@ export default {
             trackName: "",
             showTracks : false,
             artistName: "",
-            currTracksUrl: process.env.VUE_APP_API_ENDPOINT + "/currtracks"
+            currTracksUrl: process.env.VUE_APP_API_ENDPOINT + "/currtracks",
+            username: this.$store.state.user.username
         }
     },
 
-    async mounted(){
+    mounted(){
         fetch(this.currTracksUrl, {
-            method: 'GET',
+            method: 'POST',
             headers: {
             'Content-Type': 'application/json',
+            'Authorization': `JWT ${this.$store.state.token}`
             },
             mode: 'cors',
             credentials: 'include',
-            // body: JSON.stringify(data),
+            body: JSON.stringify(this.username),
             })
             .then(response => response.json())
             .then(data => {

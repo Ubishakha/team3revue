@@ -58,9 +58,6 @@ h3{
     top: 0;
     z-index: 10;
 }
-.child{
-    /* height: 800px;; */
-}
 
 .welcome{
     display: flex;

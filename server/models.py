@@ -16,7 +16,8 @@ password = os.environ.get('MONGODB_PASSWORD')
 #mongodb.exe -bind_ip *windows_ip*
 
 
-host = 'mongodb://10.2.5.54:27017/'
+# host = 'mongodb://10.2.5.54:27017/'
+host = os.environ.get('MONGODB_HOSTNAME')
 db = os.environ.get('MONGODB_DATABASE', "revue")
 connect(username=username, password=password, host=host, db=db)
 

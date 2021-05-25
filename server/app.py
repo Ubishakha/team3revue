@@ -243,7 +243,7 @@ def create_spotify_oauth(username):
         client_secret="59b70f0753fb43cb9d0fc922af134897",
         redirect_uri=url_for('redirectpage', _external=True), #...../redirectpage/
         scope="user-top-read , user-read-currently-playing, user-read-recently-played",
-        state= username,)                  
+        state= username)                  
 
 
 

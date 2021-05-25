@@ -39,15 +39,16 @@ export default {
             this.hovered = false;   
         },
   },
-        async mounted(){
+    mounted(){
         fetch(this.url, {
-            method: 'GET',
+            method: 'POST',
             headers: {
             'Content-Type': 'application/json',
+            'Authorization': `JWT ${this.$store.state.token}`,
             },
             mode: 'cors',
             credentials: 'include',
-            // body: JSON.stringify(data),
+            body: JSON.stringify(this.username),
             })
             .then(response => response.json())
             .then(data => {
