@@ -113,49 +113,62 @@ def redirectpage():
     response = make_response(username)
     return response
 
-@app.route('/mainpageorsmth/', methods=["POST"])
+@app.route('/mainpageorsmth', methods=["POST"])
 @login_required
 def mainpageorsmth(username):
     # print(get_token())
+    
     try:
         token_info = get_token(username)
     except:
-         print("user not logged in")
-    #     return {"Error": "Not logged in", "logged_in": False, "url": url_for('spotlogin', _external=True)}
+        print("user not logged in")
+        return redirect(url_for('spotlogin', _external=True))
+    #    return {"Error": "Not logged in", "logged_in": False, "url": url_for('spotlogin', _external=True)}
 
     sp = spotipy.Spotify(auth=token_info['access_token'],)
     # make_response allows to pass headers
     response = make_response(sp.current_user_recently_played(limit=10), 200)
     # Need to change the hard coded url 
-    # response.headers.add('Access-Control-Allow-Origin', 'http://localhost:8080')
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+    response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+    response.headers.add('Access-Control-Allow-Credentials', 'true')
+
+
+
+    # response.headers.add('Access-Control-Allow-Headers', 'true')
+    # response.headers.add('Access-Control-Allow-Origin', '*')
+    # response.headers.add('Access-Control-Allow-Methods', 'true')
     # response.headers.add('Access-Control-Allow-Origin', config.frontend_url)
     # response.headers.add('Access-Control-Allow-Credentials', 'true')
-    return jsonify(response)
+    return (response)
 
-@app.route('/prevtracks')
-def prevtracks():
+@app.route('/prevtracks', methods=["POST"])
+@login_required
+def prevtracks(username):
     # print(get_token())
     try:
-        token_info = get_token()
+        token_info = get_token(username)
     except:
         print("user not logged in")
-        return {"Error": "Not logged in", "logged_in": False, "url": url_for('spotlogin', _external=True)}
+        return redirect(url_for('spotlogin', _external=True))
 
     sp = spotipy.Spotify(auth=token_info['access_token'],)
     # make_response allows to pass headers
     response = make_response(sp.current_user_recently_played(limit=10), 200)
     # Need to change the hard coded url
-    
-    response.headers.add('Access-Control-Allow-Origin', 'http://localhost:8080')
-    # response.headers.add('Access-Control-Allow-Origin', config.frontend_url)
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+    response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
     response.headers.add('Access-Control-Allow-Credentials', 'true')
     return response
 
-@app.route('/currtracks')
-def currtracks():
+@app.route('/currtracks', methods=["POST"])
+@login_required
+def currtracks(username):
     # print(get_token())
     try:
-        token_info = get_token()
+        token_info = get_token(username)
     except:
         print("user not logged in")
         return {"Error": "Not logged in", "logged_in": False, "url": url_for('spotlogin', _external=True)}
@@ -165,8 +178,9 @@ def currtracks():
     # need to add error handling for curr playing false
     response = make_response(sp.current_user_playing_track(), 200)
     # Need to change the hard coded url 
-    response.headers.add('Access-Control-Allow-Origin', 'http://localhost:8080')
-    # response.headers.add('Access-Control-Allow-Origin', config.frontend_url)
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+    response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
     response.headers.add('Access-Control-Allow-Credentials', 'true')
     return response
 
@@ -201,11 +215,11 @@ def get_token(username):
 
     tokens= user.spotifyToken
 
-    print (tokens)
+    #print (tokens)
 
-    token_info = json.loads(tokens)
+    token_info = eval(tokens)
     # token_info=session.get(TOKEN_INFO, None) #return none if token_info is empty
-    
+    print (token_info)
     
     if token_info == None:
         raise exception
@@ -213,7 +227,7 @@ def get_token(username):
 
     is_expired= token_info['expires_at'] - now < 60
     if (is_expired):
-        sp_oauth= create_spotify_oauth()
+        sp_oauth= create_spotify_oauth(username)
         token_info= sp_oauth.refresh_access_token(token_info['refresh_token'])
     print(type(token_info))
     return token_info
