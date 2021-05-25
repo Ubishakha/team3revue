@@ -79,7 +79,9 @@ def redirectpage():
     # code = request.json.get("content")
     code = request.args.get('code')
     username = request.args.get('state')
+    print(code)
     sp_oauth= create_spotify_oauth(username)
+    print("Hereeeeeeee")
     token_info = sp_oauth.get_access_token(code)
 
     #store into database
@@ -89,6 +91,7 @@ def redirectpage():
     }
 
 
+    # print(token_info)
     # print(token_info)
     # add token and username to db
     schema = Schema({
@@ -240,7 +243,7 @@ def create_spotify_oauth(username):
         client_secret="59b70f0753fb43cb9d0fc922af134897",
         redirect_uri=url_for('redirectpage', _external=True), #...../redirectpage/
         scope="user-top-read , user-read-currently-playing, user-read-recently-played",
-        state= username)                  
+        state= username,)                  
 
 
 
@@ -278,3 +281,4 @@ if __name__ == "__main__":
 
 
 
+    #new changes were made

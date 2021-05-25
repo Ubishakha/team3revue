@@ -28,7 +28,7 @@ export default {
     return {
       users: {},
       showWordIndex: null,
-      url: process.env.VUE_APP_API_ENDPOINT + "/prevtracks"
+      url: process.env.VUE_APP_API_ENDPOINT + "/mainpageorsmth"
     };
   },
   methods:{
