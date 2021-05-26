@@ -1,28 +1,32 @@
 <template lang="html">
 <div class="Friendlist">
     <div class="current-track">
-        <div class="container Friend-1">
+        <div class="container Friend">
             <div @click="showTracks=!showTracks" class="hovered name">
-                <strong>Bishakha</strong>
+                <div class="friend-name">Bishakha</div>
             </div>
-            <div class="track">
-                <div>
-                    <span class="hovered currSong"><strong>Current Track: </strong>
-                        <a v-bind:href="url">
-                            <span class="trackName">
-                                {{trackName}}
+            <div v-if="isPlaying" class="tracks">
+                <img class="_5814e6eb4f933d11bfa18c01b92eff76-scss" width="14" height="14" alt="" src="https://open.scdn.co/cdn/images/equaliser-animated-green.73b73928.gif">
+                <a v-bind:href="url">
+                            <img :src="currTracksImg" alt="" width="40" height="40">
+                </a>
+                <div class="track-info">
+                    <a v-bind:href="url">
+                        <span class="trackName">
+                            {{trackName}}
+                        </span>
+                    </a>
+                    <div class="grid">
+                        <aside class="hovered currSong">
+                            {{artistName}}
+                        </aside>
+
+                        <aside class="dot">
+                            <span class="album-name">
+                                {{albumName}}
                             </span>
-                            <span class="artistName">
-                                {{artistName}}
-                            </span>
-                        </a>
-                    </span>
-                
-                    <span class= "playBtnSingle">
-                        <a v-bind:href="url" >
-                            <i class="far fa-play-circle playBtn hovered"></i>
-                        </a>
-                    </span>
+                        </aside>
+                    </div>
                 </div>
             </div>
         </div> 
@@ -48,8 +52,11 @@ export default {
             trackName: "",
             showTracks : false,
             artistName: "",
+            albumName: "",
             currTracksUrl: process.env.VUE_APP_API_ENDPOINT + "/currtracks",
-            username: this.$store.state.user.username
+            username: this.$store.state.user.username,
+            currTracksImg:"",
+            isPlaying: Boolean,
         }
     },
 
@@ -67,13 +74,21 @@ export default {
             .then(response => response.json())
             .then(data => {
                 console.log('Success:', data);
-                this.url = data.item.external_urls.spotify
-                this.trackName= data.item.name
-                this.artistName = data.item.artists[0].name
-                console.log('Success:Loaded');
+                if (data.is_playing){
+                    this.url = data.item.external_urls.spotify
+                    this.trackName= data.item.name
+                    this.artistName = data.item.artists[0].name
+                    this.currTracksImg = data.item.album.images[1].url
+                    this.isPlaying = data.is_playing
+                    this.albumName = data.item.album.name
+                }
+                else{
+                    this.isPlaying = data.is_playing
+                }
+                console.log(this.isPlaying);
             })
             .catch((error) => {
-            console.error('Error:', error);
+            console.error(error);
         });
     },
     
@@ -89,18 +104,13 @@ export default {
     color: #43af55;
 }
 
-.currSong{
+/* .currSong{
     padding-bottom: 1em;
 
+} */
+.track-info{
+    padding: 0.5em;
 }
-/* .UserInfo{
-    background: #333;
-    color: aliceblue;
-    border-radius: 2px;
-    float:left;
-    margin: 2%;
-    width: 20%; */
-/* } */
 
 .Friendlist{
     margin-right: 2%;
@@ -111,8 +121,11 @@ export default {
     border-radius: 4px;
 }
 
-strong{
+.friend-name{
+    padding-left: 2em;
+    padding-top: 1em;
     font-size: 1.05em;
+    font-weight: bold;
 }
 
 .search {
@@ -151,10 +164,6 @@ strong{
     color: aliceblue;
 } 
 
-.currSong{
-    padding-left: 1em;
-}
-
 .name{
     font-size: 20px;
     /* width: 25%; */
@@ -168,5 +177,27 @@ a{
     margin-right: 0.5em;
 }
 
-
+.grid{
+    display: grid;
+    grid-template-columns: 150px auto 60px;
+}
+.tracks{
+    display: grid;
+    padding: 0.5em;
+    margin-left: 2em;
+    grid-template-columns: 3rem 10% 2fr;
+    
+}
+aside{
+    display: flex;
+    align-items: left;
+}
+.dot{
+    display: list-item;          /* This has to be "list-item"                                               */
+    list-style-type: disc;       /* See https://developer.mozilla.org/en-US/docs/Web/CSS/list-style-type     */
+    list-style-position: inside;
+}
+.Friend{
+    padding: 0em;
+}
 </style>

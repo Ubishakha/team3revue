@@ -1,6 +1,9 @@
 <template lang="html">
   <div class="outer-wrapper"> 
+    <div class="dashboard">
       <h1>Dashboard</h1>
+    </div>
+      
        <div>
     <!-- <input class="button connect" @click="connectToSpotify" type="submit" value="Get Data"> -->
     <input class="button connect" @click = "fn" type="submit" value="Login To Spotify">
@@ -38,7 +41,7 @@ export default {
     return {
       friendQueue: [], //This needs to be filled with the data from the spotify api
       url: process.env.VUE_APP_API_ENDPOINT + "/spotlogin",
-      url2: process.env.VUE_APP_API_ENDPOINT + "/mainpageorsmth",
+      url2: process.env.VUE_APP_API_ENDPOINT + "/currtracks",
       username: this.$store.state.user.username
     }
   },
@@ -104,11 +107,16 @@ export default {
 }
 .outer-wrapper{
   width: auto;
+  
 }
-
+.dashboard{
+  padding-left: 1em;
+  font-size: 1.5em;
+  color: aliceblue;
+}
 .friend-wrapper{
   width: 70%;
-  background: #333;
+  background-color: #181818;
   margin: 2%;
   color: aliceblue;
   border-radius: 2px;

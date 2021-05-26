@@ -1,19 +1,40 @@
 <template lang="html">
   <div class="prev-tracks">
       <!-- <button @click="prevTracks">Click me</button> -->
-        <li v-for="(item, index) in users.items" v-bind:key="index">
-            <span v-if="showWordIndex === index" class= "playBtn">
+        <div v-for="(item, index) in users.items" v-bind:key="index">
+            <!-- <span v-if="showWordIndex === index" class= "playBtn">
                     <a v-bind:href="url">
                         <i class="far fa-play-circle playBtn"></i>
                     </a>
-            </span>
-            <span @mouseover="showWordIndex = index" @mouseout="showWordIndex = null" class="tracks">
-                <a v-bind:href="item.track.external_urls.spotify">
-                    <strong>{{item.track.name}}</strong>
-                    {{item.track.artists[0].name}}
-                </a>
-            </span>
-        </li>
+            </span> -->
+            
+            <div @mouseover="showWordIndex = index" @mouseout="showWordIndex = null" class="row tracks">
+                <span class="idx">{{index+1}}</span>
+                <img :src="item.track.album.images[1].url" alt="" width="40" height="40">
+                <div class="track-info">
+                    <a v-bind:href="item.track.external_urls.spotify">
+                            <span class="track-name">{{item.track.name}}</span>
+                    </a>
+                    <div class="grid">
+                        
+                            <aside class="artist-name">
+                                <a v-bind:href="item.track.artists[0].external_urls.spotify">
+                                    {{item.track.artists[0].name}}
+                                    </a>
+                            </aside>
+                                
+                            <aside class="dot">
+                                <span class="album-name">
+                                    <a v-bind:href="item.track.album.external_urls.spotify">
+                                        {{item.track.album.name}}
+                                    </a>
+                                </span>
+                            </aside>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
   </div>
 </template>
 
@@ -31,14 +52,6 @@ export default {
       url: process.env.VUE_APP_API_ENDPOINT + "/mainpageorsmth"
     };
   },
-  methods:{
-        mouseEnter: function(){
-            this.hovered = !this.hovered;   
-        },
-        mouseLeave: function(){
-            this.hovered = false;   
-        },
-  },
     mounted(){
         fetch(this.url, {
             method: 'POST',
@@ -54,7 +67,7 @@ export default {
             .then(data => {
                 this.users = data
                 // console.log(this.users)
-                console.log('Success:', data);
+                console.log('Success:', data.items[0].track.album.images[1].url);
             })
             .catch((error) => {
             console.error('Error:', error);
@@ -67,17 +80,28 @@ export default {
 
 <style scoped>
 .tracks:hover {
-    color: #43af55;
-      }
+    background-color: rgba(167, 165, 165, 0.281);
+}
 .prev-tracks{
     overflow: auto;
     max-height: 200px;
+    background-color: #181818;
 }
  strong{
      font-size: 1.05em;
      padding: 0.5em;
  }
-
+.tracks{
+    display: grid;
+    padding: 0.5em;
+    margin-left: 2em;
+    grid-template-columns: 3rem 10% 2fr
+}
+.track-info {
+    padding-left: 0.5em;
+    display: flex;
+    flex-direction: column;  
+} 
  span{
      display: inline-block;
  }
@@ -90,8 +114,26 @@ export default {
      list-style-type: none;
      padding: 0.5em;
  }
+.track-name{
+    font-weight: bold;
+}
+.track-name:hover, .artist-name:hover, .album-name:hover{
+ color: #43af55;
+}
+.dot{
+    display: list-item;          /* This has to be "list-item"                                               */
+    list-style-type: disc;       /* See https://developer.mozilla.org/en-US/docs/Web/CSS/list-style-type     */
+    list-style-position: inside;
+}
+.grid{
+    display: grid;
+    grid-template-columns: 150px auto 60px;
+    
+}
 
- .tracks{
-     margin-left: 2em;
- }
+aside{
+    display: flex;
+    align-items: left;
+    /* justify-content: center; */
+}
 </style>

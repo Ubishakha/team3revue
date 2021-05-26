@@ -179,12 +179,17 @@ def currtracks(username):
     sp = spotipy.Spotify(auth=token_info['access_token'],)
     # make_response allows to pass headers
     # need to add error handling for curr playing false
-    response = make_response(sp.current_user_playing_track(), 200)
+    try:
+        response = make_response(sp.current_user_playing_track(), 200)
     # Need to change the hard coded url 
-    response.headers.add('Access-Control-Allow-Origin', '*')
-    response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
-    response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
-    response.headers.add('Access-Control-Allow-Credentials', 'true')
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+        response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+        response.headers.add('Access-Control-Allow-Credentials', 'true')
+        print(response)
+    except:
+        response = {"is_playing": False}
+        print(response)
     return response
 
 # @app.route('/current-track')
