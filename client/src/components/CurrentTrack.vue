@@ -1,7 +1,7 @@
 <template lang="html">
 <div class="Friendlist">
     <div class="current-track">
-        <div class="container Friend">
+        <div class="Friend">
             <div @click="showTracks=!showTracks" class="hovered name">
                 <div class="friend-name">Bishakha</div>
             </div>

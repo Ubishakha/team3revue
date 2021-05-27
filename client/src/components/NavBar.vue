@@ -15,6 +15,12 @@
 export default {
   name: 'nav',
 
+  data(){
+    return{
+    showLogin: false,
+    }
+  },
+
   methods: {
     logout() {
       this.$store.dispatch('setToken', null)

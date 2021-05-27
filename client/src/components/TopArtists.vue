@@ -1,21 +1,14 @@
 <template lang="html">
-  <div class="prev-tracks">
-      <!-- <button @click="prevTracks">Click me</button> -->
-        <div v-for="(item, index) in Object.values(users).slice(0,10)" v-bind:key="index">
-            <!-- <span v-if="showWordIndex === index" class= "playBtn">
-                    <a v-bind:href="url">
-                        <i class="far fa-play-circle playBtn"></i>
-                    </a>
-            </span> -->
+  <div class="top-artists">
+        <div v-for="(item, index) in artists" v-bind:key="index">
             <div @mouseover="showWordIndex = index" @mouseout="showWordIndex = null" class="row tracks">
                 <span class="idx">{{index+1}}</span>
-                <img :src="item.track.album.images[1].url" alt="" width="40" height="40">
-                <div class="track-info">
-                    <a v-bind:href="item.track.external_urls.spotify">
-                            <span class="track-name">{{item.track.name}}</span>
+                <img :src="item.images[1].url" alt="" width="40" height="40">
+                <div class="artist-info">
+                    <a v-bind:href="item.external_urls.spotify">
+                            <span class="artist-name">{{item.name}}</span>
                     </a>
-                    <div class="grid">
-                        
+                    <!-- <div class="grid">
                             <aside class="artist-name">
                                 <a v-bind:href="item.track.artists[0].external_urls.spotify">
                                     {{item.track.artists[0].name}}
@@ -29,7 +22,7 @@
                                     </a>
                                 </span>
                             </aside>
-                    </div>
+                    </div> -->
                     
                 </div>
             </div>
@@ -42,14 +35,13 @@
 // import spot from '../json/prev-tracks.json'
 
 export default {
-    name: 'prev-tracks',
+    name: 'top-artists',
     
     data() {
     return {
-        
-      users: {},
+      artists: {},
       showWordIndex: null,
-      url: process.env.VUE_APP_API_ENDPOINT + "/prevtracks"
+      url: process.env.VUE_APP_API_ENDPOINT + "/artists"
     };
   },
     mounted(){
@@ -65,18 +57,18 @@ export default {
             })
             .then(response => response.json())
             .then(data => {
-                let arr = data.items
-                let uniqueTracks = new Map()
+                // let arr = data.items
+                // let uniqueArtists = new Map()
                 
-                arr.forEach(element => {
+                // arr.forEach(element => {
                     
-                    if (!uniqueTracks.has(element.track.id)){
-                    uniqueTracks[element.track.id] = element
-                    }
-                });
+                //     if (!uniqueTracks.has(element.track.id)){
+                //     uniqueTracks[element.track.id] = element
+                //     }
+                // });
 
-                this.users = uniqueTracks
-                console.log('Success:', Object.values(this.users));
+                this.artists = data.items
+                console.log('Success:', data.items);
             })
             .catch((error) => {
             console.error('Error:', error);
@@ -92,7 +84,7 @@ export default {
 .tracks:hover {
     background-color: rgba(167, 165, 165, 0.281);
 }
-.prev-tracks{
+.top-artists{
     overflow: auto;
     max-height: 200px;
     background-color: #181818;
@@ -108,7 +100,7 @@ export default {
     margin-left: 2em;
     grid-template-columns: 3rem 10% 2fr
 }
-.track-info {
+.artist-info {
     padding-left: 0.5em;
     display: flex;
     flex-direction: column;  
@@ -125,7 +117,7 @@ export default {
      list-style-type: none;
      padding: 0.5em;
  }
-.track-name{
+.artist-name{
     font-weight: bold;
 }
 .track-name:hover, .artist-name:hover, .album-name:hover{
