@@ -158,12 +158,13 @@ def prevtracks(username):
 
     sp = spotipy.Spotify(auth=token_info['access_token'],)
     # make_response allows to pass headers
-    response = make_response(sp.current_user_recently_played(limit=10), 200)
+    response = make_response(sp.current_user_recently_played(limit=30), 200)
     # Need to change the hard coded url
     response.headers.add('Access-Control-Allow-Origin', '*')
     response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
     response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
     response.headers.add('Access-Control-Allow-Credentials', 'true')
+    print(response)
     return response
 
 @app.route('/currtracks', methods=["POST"])

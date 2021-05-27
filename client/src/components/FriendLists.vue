@@ -15,7 +15,7 @@
       <li><a href="#">Yohan</a></li>
       <li><a href="#">Jamil</a></li>
     </ul>
-    <!--<FriendList :friendList="friendList" />-->
+    
   </div>
 </template>
 
@@ -58,9 +58,6 @@ export default {
 #friendList {
   background-color: #333;
   border-radius: 10px;
-  height: 350px;
-  float: left;
-  margin-left: 50px;
 }
 #myInput {
   background-image: url('/css/searchicon.png');
@@ -88,7 +85,11 @@ export default {
   display: block
 }
 
+#myUL li a:hover{
+color: #43af55;
+}
+
 #myUL li a:hover:not(.header) {
-  background-color: rgb(170, 170, 170);
+  background-color: rgba(167, 165, 165, 0.281);
 }
 </style>

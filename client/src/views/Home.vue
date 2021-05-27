@@ -2,47 +2,48 @@
   <div class="outer-wrapper"> 
     <div class="dashboard">
       <h1>Dashboard</h1>
+      <!-- <div>
+        <input class="button connect" @click="connectToSpotify" type="submit" value="Get Data">
+        <input class="button connect" @click = "fn" type="submit" value="Login To Spotify">
+        <input class="button connect" @click = "fn2" type="submit" value="Get">
+      </div> -->
     </div>
-      
-       <div>
-    <!-- <input class="button connect" @click="connectToSpotify" type="submit" value="Get Data"> -->
-    <input class="button connect" @click = "fn" type="submit" value="Login To Spotify">
-    <input class="button connect" @click = "fn2" type="submit" value="Get">
-  </div>
-      <div class="wrapper"> 
-        
-          <FriendLists class="main-child" :friendLists="friendLists" />
-          <CurrentTrack/>
-          <!-- <FriendQueue class="main-child" :friendQueue="friendQueue" /> This is the list of friend's currently playing songs -->
-        
-      </div>
+
+    <div class="container content">
+        <div class="container col-3 friend-wrapper"> 
+          <!-- <p>abc</p> -->
+            <FriendLists class="main-child" :friendLists="friendLists" />
+        </div>
+        <div class="container col-6 tracks-wrapper">
+            <CurrentTrack/>
+            <!-- <FriendQueue class="main-child" :friendQueue="friendQueue" /> This is the list of friend's currently playing songs -->
+          
+        </div>
+    </div>
+    
   </div>
  
 </template>
 
 <script>
-// import { mapGetters } from "vuex";
-// import PostPreview from '@/components/PostPreview'
+
 import CurrentTrack from '@/components/CurrentTrack'
-// import PostsService from '@/services/PostsService'
-// import FriendQueue from '@/components/FriendQueue'
+
 import FriendLists from '@/components/FriendLists'
 
-// import CurrentTrack from '@/components/CurrentTrack'
-// import PostsService from '@/services/PostsService'
-// import Spotify from '@/services/Spotify'
 
 export default {
   name: 'home',
 
-  components: { FriendLists,CurrentTrack },
+  components: { FriendLists, CurrentTrack },
   
   data() {
     return {
       friendQueue: [], //This needs to be filled with the data from the spotify api
       url: process.env.VUE_APP_API_ENDPOINT + "/spotlogin",
-      url2: process.env.VUE_APP_API_ENDPOINT + "/currtracks",
-      username: this.$store.state.user.username
+      url2: process.env.VUE_APP_API_ENDPOINT + "/prevtracks",
+      username: this.$store.state.user.username,
+      array: {}
     }
   },
   methods:{
@@ -68,7 +69,12 @@ export default {
           console.error('Error:', error);
         });
       },
-  fn2(){
+      removDupes(arr){
+        let uniqueChars = [...new Set(arr)];
+
+        console.log(uniqueChars);
+      },
+    fn2(){
       // alert(this.username);
       fetch(this.url2, {
         method: 'POST',
@@ -82,7 +88,18 @@ export default {
         })
         .then(response => response.json())
         .then(data => {
-          console.log('Success:', data);
+          
+          let arr = data.items
+          let uniqueTracks = new Map()
+         
+          arr.forEach(element => {
+            
+            if (!uniqueTracks.has(element.track.id)){
+              uniqueTracks[element.track.id] = element
+            }
+          });
+          
+          console.log('Success:', uniqueTracks);
         })
         .catch((error) => {
           console.error('Error:', error);
@@ -105,21 +122,30 @@ export default {
   float:left;
   width: 20%;
 }
-.outer-wrapper{
-  width: auto;
+/* .outer-wrapper{
+  /* display: grid;
+  grid-template-rows: 30px 1fr; */
+  /* width: auto; */
   
-}
+
 .dashboard{
   padding-left: 1em;
   font-size: 1.5em;
   color: aliceblue;
+  height: 15%;
+  width: 100%;
 }
 .friend-wrapper{
+  float: left;
+}
+
+.content {
+  display: flex;
+  /* flex-wrap: wrap; */
+  align-content: space-between;
+}
+
+.tracks-wrapper{
   width: 70%;
-  background-color: #181818;
-  margin: 2%;
-  color: aliceblue;
-  border-radius: 2px;
-  /* float:right; */
 }
 </style>

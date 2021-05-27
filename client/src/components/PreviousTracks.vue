@@ -1,13 +1,12 @@
 <template lang="html">
   <div class="prev-tracks">
       <!-- <button @click="prevTracks">Click me</button> -->
-        <div v-for="(item, index) in users.items" v-bind:key="index">
+        <div v-for="(item, index) in Object.values(users).slice(0,10)" v-bind:key="index">
             <!-- <span v-if="showWordIndex === index" class= "playBtn">
                     <a v-bind:href="url">
                         <i class="far fa-play-circle playBtn"></i>
                     </a>
             </span> -->
-            
             <div @mouseover="showWordIndex = index" @mouseout="showWordIndex = null" class="row tracks">
                 <span class="idx">{{index+1}}</span>
                 <img :src="item.track.album.images[1].url" alt="" width="40" height="40">
@@ -47,9 +46,10 @@ export default {
     
     data() {
     return {
+        
       users: {},
       showWordIndex: null,
-      url: process.env.VUE_APP_API_ENDPOINT + "/mainpageorsmth"
+      url: process.env.VUE_APP_API_ENDPOINT + "/prevtracks"
     };
   },
     mounted(){
@@ -65,14 +65,24 @@ export default {
             })
             .then(response => response.json())
             .then(data => {
-                this.users = data
-                // console.log(this.users)
-                console.log('Success:', data.items[0].track.album.images[1].url);
+                let arr = data.items
+                let uniqueTracks = new Map()
+                
+                arr.forEach(element => {
+                    
+                    if (!uniqueTracks.has(element.track.id)){
+                    uniqueTracks[element.track.id] = element
+                    }
+                });
+
+                this.users = uniqueTracks
+                console.log('Success:', Object.values(this.users));
             })
             .catch((error) => {
             console.error('Error:', error);
         });
     },
+
 }
 
     

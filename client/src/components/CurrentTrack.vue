@@ -114,8 +114,6 @@ export default {
 
 .Friendlist{
     margin-right: 2%;
-    width: 70%;
-    float:right;
     background: #333;
     color: aliceblue;
     border-radius: 4px;
