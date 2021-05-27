@@ -1,6 +1,7 @@
 <template lang="html">
   <nav>
-    <router-link class="title" :to="{ name: 'Home', params: {} }">Spoti-Fi</router-link>
+    <router-link v-if="$store.state.isUserLoggedIn" class="title" :to="{ name: 'Home', params: {} }">Spoti-Fi</router-link>
+    <router-link v-if="!$store.state.isUserLoggedIn" class="title" :to="{ name: 'Landing', params: {} }">Spoti-Fi</router-link>
 
     <router-link v-if="!$store.state.isUserLoggedIn" style="float:right" :to="{ name: 'SignUp', params: {} }">Sign Up</router-link>
     <router-link v-if="!$store.state.isUserLoggedIn" style="float:right" :to="{ name: 'Login', params: {} }">Login</router-link>
@@ -18,7 +19,7 @@ export default {
     logout() {
       this.$store.dispatch('setToken', null)
       this.$store.dispatch('setUser', null)
-      this.$router.push({name: 'Home'})
+      this.$router.push({name: 'Landing'})
     }
   }
 }

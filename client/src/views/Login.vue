@@ -50,7 +50,7 @@ export default {
 
 <style scoped lang="css">
 .login {
-  background: rgb(23, 92, 93);
+  background: linear-gradient(0deg, rgba(30,32,30,1) 8%, rgba(48,133,60,1) 100%);
   background-image: url(/static/newsletter-login.jpg);
   background-position: center;
   background-size: cover;

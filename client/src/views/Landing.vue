@@ -71,7 +71,7 @@ h3{
     color:aliceblue;
 }
 .parent {
-    background-image: linear-gradient(#00240c, #0d8a35, #4f8c99);
+    background: linear-gradient(0deg, rgba(30,32,30,1) 8%, rgba(48,133,60,1) 100%);
     position: absolute;
     width: 100%;
     height: 100%;
