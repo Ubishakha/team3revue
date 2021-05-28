@@ -24,10 +24,6 @@
 </template>
 
 <script>
-// import SubvueInfo from '@/components/SubvueInfo'
-// import CreateButton from '@/components/CreateButton'
-// import PostPreview from '@/components/PostPreview'
-// import SubvuesService from '@/services/SubvuesService'
 export default {
     name: 'landing',
     methods:{
