@@ -42,8 +42,8 @@ app.json_encoder = CustomJSONEncoder
 app.config["SECRET_KEY"] = config.flask_secret_key
 app.config['SESSION_COOKIE_NAME']= 'Spoti-fi Cookie'
 app.config['SESSION_COOKIE_HTTPONLY'] = True
-cors = CORS(app, origins=['http://localhost:5000', 'http://localhost:8080', 'http://localhost:80'], supports_credentials=True)
-# cors = CORS(app, origins=[config.api_endpoint, config.frontend_url], supports_credentials=True)
+# cors = CORS(app, origins=['http://localhost:5000', 'http://localhost:8080', 'http://localhost:80'], supports_credentials=True)
+cors = CORS(app, origins=[config.api_endpoint, config.frontend_url], supports_credentials=True)
 TOKEN_INFO='token_info'
 
 
@@ -152,7 +152,7 @@ def prevtracks(username):
     # make_response allows to pass headers
     response = make_response(sp.current_user_recently_played(limit=30), 200)
     # Need to change the hard coded url
-    response.headers.add('Access-Control-Allow-Origin', '*')
+    response.headers.add('Access-Control-Allow-Origin', config.frontend_url)
     response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
     response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
     response.headers.add('Access-Control-Allow-Credentials', 'true')
@@ -173,7 +173,7 @@ def artists(username):
     # make_response allows to pass headers
     response = make_response(sp.current_user_top_artists(limit=10), 200)
     # Need to change the hard coded url
-    response.headers.add('Access-Control-Allow-Origin', '*')
+    response.headers.add('Access-Control-Allow-Origin', config.frontend_url)
     response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
     response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
     response.headers.add('Access-Control-Allow-Credentials', 'true')
@@ -195,7 +195,7 @@ def currtracks(username):
     try:
         response = make_response(sp.current_user_playing_track(), 200)
     # Need to change the hard coded url 
-        response.headers.add('Access-Control-Allow-Origin', '*')
+        response.headers.add('Access-Control-Allow-Origin', config.frontend_url)
         response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
         response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
         response.headers.add('Access-Control-Allow-Credentials', 'true')

@@ -3,7 +3,7 @@
     <div class="dashboard">
       <h1>Dashboard</h1>
       <div>
-        <button class="button connect" @click = "getUsers">Login to Spotify</button>
+        <!-- <button class="button connect" @click = "getUsers">Get all users</button> -->
         <!-- <input class="button connect" @click="connectToSpotify" type="submit" value="Get Data">
         
         <input class="button connect" @click = "fn2" type="submit" value="Get"> -->
@@ -43,6 +43,7 @@ export default {
       friendQueue: [], //This needs to be filled with the data from the spotify api
       url: process.env.VUE_APP_API_ENDPOINT + "/spotlogin",
       url2: process.env.VUE_APP_API_ENDPOINT + "/prevtracks",
+      url3: process.env.VUE_APP_API_ENDPOINT + "/users",
       username: this.$store.state.user.username,
       array: {},
       all: null
@@ -52,9 +53,9 @@ export default {
   methods:{
 
     getUsers(){
-        Spotify.index().then(response=>{
-      this.all = response.data
-      console.log("Users: "+this.all)
+      Spotify.index().then(response=>{
+        this.all = response.data
+        console.log("Users: "+this.all)
     })
     }
     
@@ -81,6 +82,25 @@ export default {
       .catch((error) => {
         console.error('Error:', error);
       });
+
+      // fetch(this.url3, {
+      // method: 'POST',
+      // headers: {
+      //   'Content-Type': 'application/json',
+      //   'Authorization': `JWT ${this.$store.state.token}`
+      // },
+      // mode: 'cors',
+      // credentials: 'include',
+      // body: JSON.stringify(this.username),
+      
+      // })
+      // .then(response => response.json())
+      // .then(data => {
+      //   console.log('Success:', data);
+      // })
+      // .catch((error) => {
+      //   console.error('Error:', error);
+      // });
     },
 
 }
