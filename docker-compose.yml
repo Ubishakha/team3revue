@@ -26,7 +26,7 @@ services:
   mongodb:
     image: knox.edu/mongo
     build: 
-      context: Mongo 
+      context: mongo 
       dockerfile: Dockerfile   
     container_name: mongodb
     restart: unless-stopped
