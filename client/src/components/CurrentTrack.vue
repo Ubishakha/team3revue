@@ -36,8 +36,6 @@
 </template>
 
 <script>
-// import Spotify from '@/services/Spotify'
-// import spot from '../json/curr-track.json'
 import PreviousTracks from '@/components/PreviousTracks'
 
 export default {
@@ -53,11 +51,42 @@ export default {
             showTracks : false,
             artistName: "",
             albumName: "",
+            urllog: process.env.VUE_APP_API_ENDPOINT + "/spotlogin",
             currTracksUrl: process.env.VUE_APP_API_ENDPOINT + "/currtracks",
             username: this.$store.state.user.username,
             currTracksImg:"",
-            isPlaying: Boolean,
+            isPlaying: false,
         }
+    },
+
+    methods:{
+        fn(){
+      
+            fetch(this.urllog, {
+            method: 'POST',
+            headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `JWT ${this.$store.state.token}`
+            },
+            mode: 'cors',
+            credentials: 'include',
+            body: JSON.stringify(this.username),
+            
+            })
+            .then(response => response.json())
+            .then(data => {
+            console.log('Success:', data);
+            window.open(data);
+            })
+            .catch((error) => {
+            console.error('Error:', error);
+            });
+      },
+      removDupes(arr){
+        let uniqueChars = [...new Set(arr)];
+
+        console.log(uniqueChars);
+      },
     },
 
     mounted(){

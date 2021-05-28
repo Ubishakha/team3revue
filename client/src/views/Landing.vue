@@ -1,46 +1,22 @@
 <template lang="html">
   <div class="landing parent">
-    <div class="container welcome">
+    <div class="welcome">
         <h1>Welcome to Spoti-Fi</h1>
     </div>
-    <div class="container child">
-        <div class="container info">
+    <div class="child">
+        <div class="info">
             <span>
                 <h3>
                    Discover, connect and share new music on Spotify through your friends. 
                 </h3>
             </span>
         </div>
-        <div class="container buttons">
+        <div class="buttons">
             
             <button @click="redirectToLogin()" type="button" class="btn btn-primary">Log in</button>
         
             <button @click="redirectToSignup()" type="button" class="btn btn-success">Sign Up</button>
         
-            <button type="button" class="btn btn-success">About Us</button>
-        </div>
-    </div>
-
-    <div class="container dev">
-        <span class="title">
-            <h2>
-                Meet the Devs
-            </h2>
-        </span>
-        <div class="container flex-grid">
-            <!-- <h3>
-            Spoti-Fi was build as a project for Software Engineering class(CS 322) at Knox College.
-            </h3> -->
-            <div class="col">
-                
-                Bishakha
-            </div>
-            <div class="col">
-                Dikshant
-            </div>
-            <div class="col">
-                Justin
-            </div>
         </div>
     </div>
   </div>
@@ -84,13 +60,20 @@ h3{
     display: flex;
     font-size: 2em;
     color: aliceblue;
+    margin: 0.5em;
+}
+.child{
+    float: left;
+    margin-left: 1em;
 }
 .info{
     width: 500px;;
 }
-.dev{
+.devs{
+    margin: 1em;
     color: aliceblue;
     width: 600px;
+    float: left;
 }
 .title{
     font-size: 1.5em;

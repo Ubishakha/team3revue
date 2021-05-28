@@ -5,6 +5,11 @@ import Home from '@/views/Home'
 const routes = [
   {
     path: '/',
+    name: 'Landing',
+    component: () => import(/* webpackChunkName: "landing" */ '@/views/Landing')
+  },
+  {
+    path: '/home',
     name: 'Home',
     component: Home
   },
@@ -13,11 +18,11 @@ const routes = [
     name: 'Login',
     component: () => import(/* webpackChunkName: "login" */ '@/views/Login')
   },
-  {
-    path: '/landing',
-    name: 'Landing',
-    component: () => import(/* webpackChunkName: "login" */ '@/views/Landing')
-  },
+  // {
+  //   path: '/landing',
+  //   name: 'Landing',
+  //   component: () => import(/* webpackChunkName: "landing" */ '@/views/Landing')
+  // },
   {
     path: '/signup',
     name: 'SignUp',

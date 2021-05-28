@@ -2,19 +2,20 @@
   <div class="outer-wrapper"> 
     <div class="dashboard">
       <h1>Dashboard</h1>
-      <!-- <div>
-        <input class="button connect" @click="connectToSpotify" type="submit" value="Get Data">
-        <input class="button connect" @click = "fn" type="submit" value="Login To Spotify">
-        <input class="button connect" @click = "fn2" type="submit" value="Get">
-      </div> -->
+      <div>
+        <button class="button connect" @click = "getUsers">Login to Spotify</button>
+        <!-- <input class="button connect" @click="connectToSpotify" type="submit" value="Get Data">
+        
+        <input class="button connect" @click = "fn2" type="submit" value="Get"> -->
+      </div>
     </div>
 
-    <div class="container content">
+    <div class="content">
         <div class="container col-3 friend-wrapper"> 
           <!-- <p>abc</p> -->
             <FriendLists class="main-child" :friendLists="friendLists" />
         </div>
-        <div class="container col-6 tracks-wrapper">
+        <div class="container tracks-wrapper">
             <CurrentTrack/>
             <!-- <FriendQueue class="main-child" :friendQueue="friendQueue" /> This is the list of friend's currently playing songs -->
           
@@ -28,7 +29,7 @@
 <script>
 
 import CurrentTrack from '@/components/CurrentTrack'
-
+import Spotify from '@/services/Spotify'
 import FriendLists from '@/components/FriendLists'
 
 
@@ -43,69 +44,44 @@ export default {
       url: process.env.VUE_APP_API_ENDPOINT + "/spotlogin",
       url2: process.env.VUE_APP_API_ENDPOINT + "/prevtracks",
       username: this.$store.state.user.username,
-      array: {}
+      array: {},
+      all: null
     }
   },
-  methods:{
-    fn(){
-      // alert(this.username);
-      fetch(this.url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `JWT ${this.$store.state.token}`
-        },
-        mode: 'cors',
-        credentials: 'include',
-        body: JSON.stringify(this.username),
-        
-        })
-        .then(response => response.json())
-        .then(data => {
-          console.log('Success:', data);
-          window.open(data);
-        })
-        .catch((error) => {
-          console.error('Error:', error);
-        });
-      },
-      removDupes(arr){
-        let uniqueChars = [...new Set(arr)];
 
-        console.log(uniqueChars);
-      },
-    fn2(){
-      // alert(this.username);
-      fetch(this.url2, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `JWT ${this.$store.state.token}`,
-        },
-        mode: 'cors',
-        credentials: 'include',
-        body: JSON.stringify(this.username),
-        })
-        .then(response => response.json())
-        .then(data => {
-          
-          let arr = data.items
-          let uniqueTracks = new Map()
-         
-          arr.forEach(element => {
-            
-            if (!uniqueTracks.has(element.track.id)){
-              uniqueTracks[element.track.id] = element
-            }
-          });
-          
-          console.log('Success:', uniqueTracks);
-        })
-        .catch((error) => {
-          console.error('Error:', error);
-        });
-      },
+  methods:{
+
+    getUsers(){
+        Spotify.index().then(response=>{
+      this.all = response.data
+      console.log("Users: "+this.all)
+    })
+    }
+    
   },
+  
+  mounted(){
+    
+    // alert(this.username);
+    fetch(this.url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `JWT ${this.$store.state.token}`
+      },
+      mode: 'cors',
+      credentials: 'include',
+      body: JSON.stringify(this.username),
+      
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log('Success:', data);
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
+    },
 
 }
 </script>
@@ -142,10 +118,10 @@ export default {
 .content {
   display: flex;
   /* flex-wrap: wrap; */
-  align-content: space-between;
+  /* align-content: space-between; */
 }
 
 .tracks-wrapper{
-  width: 70%;
+  width: 80%;
 }
 </style>

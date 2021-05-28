@@ -89,11 +89,6 @@ def redirectpage():
     data = {
             "username": username
     }
-
-
-    # print(token_info)
-    # print(token_info)
-    # add token and username to db
     schema = Schema({
         "username": str
     })
@@ -110,9 +105,6 @@ def redirectpage():
     user.spotifyToken = tokens
     
     user.save()
-
-    
-    # response = make_response(redirect('/mainpageorsmth'))
     response = make_response(username)
     return response
 
@@ -185,7 +177,6 @@ def artists(username):
     response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
     response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
     response.headers.add('Access-Control-Allow-Credentials', 'true')
-    print(response)
     return response
 
 @app.route('/currtracks', methods=["POST"])
@@ -208,23 +199,10 @@ def currtracks(username):
         response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
         response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
         response.headers.add('Access-Control-Allow-Credentials', 'true')
-        print(response)
     except:
         response = {"is_playing": False}
-        print(response)
+        
     return response
-
-# @app.route('/current-track')
-# def currentTrack():
-#     try:
-#         token_info= get_token()
-#     except:
-#         print("user not logged in")
-#         return {"Error": "Not logged in", "logged_in": False, "url": url_for('spotlogin', _external=True)}
-#     #print (token_info)
-#     sp = spotipy.Spotify(auth=token_info['access_token'],)
-#     return {"data": sp.current_user_playing_track(), "logged_in": True}
-
 
 def get_token(username):
     #get from database
@@ -237,18 +215,11 @@ def get_token(username):
     })
     validated = schema.validate(data)
     users = User.objects(username=validated["username"])
-
-    # if len(users) == 0:
-    #     return jsonify({"error": "User not found"}), 403
-
     user = users.first()
 
     tokens= user.spotifyToken
 
-    #print (tokens)
-
     token_info = eval(tokens)
-    # token_info=session.get(TOKEN_INFO, None) #return none if token_info is empty
     print (token_info)
     
     if token_info == None:
@@ -259,7 +230,6 @@ def get_token(username):
     if (is_expired):
         sp_oauth= create_spotify_oauth(username)
         token_info= sp_oauth.refresh_access_token(token_info['refresh_token'])
-    print(type(token_info))
     return token_info
 
 
