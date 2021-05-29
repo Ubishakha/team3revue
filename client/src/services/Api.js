@@ -7,7 +7,8 @@ export default () => {
     //                       -> https://stackoverflow.com/questions/51406770/how-to-set-api-path-in-vue-config-js-for-production
     baseURL: process.env.VUE_APP_API_ENDPOINT + "/api",
     headers: {
-      Authorization: `JWT ${store.state.token}`
+      Authorization: `JWT ${store.state.token}`,
+      'Content-Type':  'application/json'
     }
   })
 }
