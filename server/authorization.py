@@ -10,7 +10,7 @@ def login_required(f):
     def wrap(*args, **kwargs):
         if "Authorization" in request.headers:
             # Check whether token was sent
-            authorization_header = request.headers["Authorization, Content-Type"]
+            authorization_header = request.headers["Authorization"]
 
             # Check whether token is valid
             try:

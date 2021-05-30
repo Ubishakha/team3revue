@@ -3,7 +3,7 @@
     <div class="current-track">
         <div class="Friend">
             <div @click="showTracks=!showTracks" class="hovered name">
-                <div class="friend-name">Bishakha</div>
+                <div class="friend-name">{{$store.state.user.username}}</div>
             </div>
             <div v-if="isPlaying" class="tracks">
                 <img class="_5814e6eb4f933d11bfa18c01b92eff76-scss" width="14" height="14" alt="" src="https://open.scdn.co/cdn/images/equaliser-animated-green.73b73928.gif">
